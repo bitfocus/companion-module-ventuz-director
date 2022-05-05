@@ -37,7 +37,7 @@ export class ActionsProvider {
 		DRCommands.playlistActivate,
 		DRCommands.macroExecute,
 		DRCommands.windowSetLayout,
-	] //an advanced callback will be applied to this commands.
+	] //An advanced callback will be applied to this commands.
 
 	private drModuleInstance: DRModuleInstance
 	drActionInfos: DrActionInfo[]
@@ -88,7 +88,6 @@ export class ActionsProvider {
 					this.handleActionCallback(action, bank)
 				},
 			},
-			// Topology
 			[ActionNames.topologySet]: {
 				label: CompanionLabels.topologySet,
 				options: [
@@ -121,7 +120,6 @@ export class ActionsProvider {
 					this.handleActionCallback(action, bank)
 				},
 			},
-			// Remote PlayList
 			[ActionNames.remotePlaylistOpen]: {
 				label: CompanionLabels.remotePlaylistOpen,
 				options: [
@@ -164,7 +162,6 @@ export class ActionsProvider {
 					this.handleActionCallback(action, bank)
 				},
 			},
-			// Show
 			[ActionNames.showOpen]: {
 				label: CompanionLabels.showOpen,
 				options: [
@@ -524,7 +521,6 @@ export class ActionsProvider {
 					this.handleActionCallback(action, bank)
 				},
 			},
-			// Timeline
 			[ActionNames.timelinePlay]: {
 				label: CompanionLabels.timelinePlay,
 				options: [],
@@ -659,7 +655,6 @@ export class ActionsProvider {
 	private unsubscribeAction(action: CompanionActionEvent) {
 		const index = this.drActionInfos.findIndex((a) => a.id === action.id)
 		if (index != -1) {
-			//Delete it:
 			//Delete from action infos array:
 			this.drActionInfos.splice(index, 1)
 			//Assign undefined in the drCompanionInfoFound
@@ -718,8 +713,8 @@ export class ActionsProvider {
 				return true
 			}
 		}
-		// IMPORTANT!
-		// Always convert the value of the bank and page to number because it can come as a string, if you don't do it you can have duplicates in the drCompanionInfos.
+		//IMPORTANT!
+		//Always convert the value of the bank and page to number because it can come as a string, if you don't do it you can have duplicates in the drCompanionInfos.
 		if (isNumber(info.bank) && isNumber(info.page)) {
 			const numberBank: number = Number(info.bank)
 			const numberPage: number = Number(info.page)
@@ -733,7 +728,7 @@ export class ActionsProvider {
 				if (drCompanionInfoFound.drActionInfo) {
 					//drActionInfo exists?
 					if (drCompanionInfoFound.drActionInfo.id === action.id) {
-						// same action id?
+						//same action id?
 						console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
 						if (canProcess(drCompanionInfoFound)) {
 							drActionInfo.isRunning = true

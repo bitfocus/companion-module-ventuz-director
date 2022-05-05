@@ -230,7 +230,7 @@ export function buildRequestMsg(
 		}
 		case ActionNames.topologySet: {
 			addOptionToRequest(options, msg, DRProperties.name)
-			addOptionToRequest(options, msg, DRProperties.saveTopology) //booleans will always be included
+			addOptionToRequest(options, msg, DRProperties.saveTopology)
 			addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}

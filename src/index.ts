@@ -1,13 +1,11 @@
 import instance_skel = require('../../../instance_skel')
 import {
-	CompanionActionEvent,
-	CompanionActionEventInfo,
 	CompanionConfigField,
 	CompanionSystem,
 } from '../../../instance_skel_types'
 import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
-import { DrActionInfo, DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
+import { DrCompanionInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
 import { getFeedbackFromRequestId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
@@ -94,7 +92,7 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 				this.getAllFeedbacks()
 			) //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Unary_plus
 			if (feedbackFound) {
-				feedbackFound.options.currentStatus = json.Code.toString() //TODO change this
+				feedbackFound.options.currentStatus = json.Code.toString()
 				this.checkFeedbacksById(feedbackFound.id)
 			}
 

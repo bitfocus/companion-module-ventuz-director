@@ -45,7 +45,7 @@ export const DRProperties = {
 	templateDisplayName: 'TemplateDisplayName',
 	pageDisplayName: 'PageDisplayName',
 } as const
-// Director Remoting Commands
+//Director Remoting Commands
 export const DRCommands = {
 	windowFullscreen: 'window.fullscreen',
 	windowReverse: 'window.reverse',
