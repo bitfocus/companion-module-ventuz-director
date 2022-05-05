@@ -773,7 +773,6 @@ export class ActionsProvider {
 	}
 
 	private processAction(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
-		//TODO request id must not be optional
 		try {
 			this.drModuleInstance.wsClient.send(
 				JSON.stringify(
