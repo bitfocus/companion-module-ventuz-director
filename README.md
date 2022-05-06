@@ -1,5 +1,6 @@
 # companion-module-ventuz-director
 
+This module allows you to control the [Ventuz](https://www.ventuz.com/) [Director](https://www.ventuz.com/director/) via Websocket.
 
 ## Getting started
 
