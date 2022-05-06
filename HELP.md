@@ -1,6 +1,6 @@
 ## Ventuz Technology - Director
 
-Module to control Director via Websocket.
+This module allows you to control the [Ventuz](https://www.ventuz.com/) [Director](https://www.ventuz.com/director/) via Websocket.
 
 ### Implemented Actions
 
