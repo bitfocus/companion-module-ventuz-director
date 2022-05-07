@@ -21,11 +21,11 @@
   "author": "Victor Perez <victor.perez@ventuz.com>",
   "license": "MIT",
   "dependencies": {
-    "websocket": "^1.0.34",
-    "typescript": "~4.5"
+    "@types/websocket": "^1.0.5",
+    "typescript": "~4.5",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "@types/websocket": "^1.0.4",
     "typescript": "~4.5"
   }
 }
