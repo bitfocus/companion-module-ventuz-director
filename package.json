@@ -18,7 +18,7 @@
     "lint": "eslint . --ext .ts",
     "postinstall": "yarn build"
   },
-  "author": "Victor Perez <victor.perez@ventuz.com>",
+  "author": "Ventuz Technology AG <companion@ventuz.com>",
   "license": "MIT",
   "homepage": "https://github.com/bitfocus/companion-module-ventuz-director#readme",
 	"bugs": {
