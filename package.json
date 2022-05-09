@@ -9,7 +9,7 @@
   "manufacturer": "Ventuz Technology",
   "product": "Director",
   "shortname": "Director",
-  "description": "Companion Module to control Ventuz Director (6.11+)",
+  "description": "Companion Module to control Ventuz Director (Enterprise edition version 6.11+)",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx rimraf dist && npx typescript@~4.5 -p tsconfig.json",
