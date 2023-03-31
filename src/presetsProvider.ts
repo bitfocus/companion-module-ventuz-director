@@ -1,5 +1,6 @@
+import { CompanionButtonPresetDefinition, CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, combineRgb } from '@companion-module/base'
 import DRModuleInstance = require('.')
-import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
+// import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
 
 export class PresetsProvider {
@@ -8,191 +9,258 @@ export class PresetsProvider {
 	constructor(drModuleInstance: DRModuleInstance) {
 		this.drModuleInstance = drModuleInstance
 	}
-	getPresets(): CompanionPreset[] {
+	getPresets(): CompanionButtonPresetDefinition[]  {
 		return [
 			{
+				
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showTakePreset,
-				bank: this.getBankOptions(CompanionLabels.showTakePresetBank),
-				actions: [
+				name: CompanionLabels.showTakePreset,
+				style: this.getBankOptions(CompanionLabels.showTakePresetBank),
+				steps: [
 					{
-						action: ActionNames.showTake,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showTake,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanTake,
+						feedbackId: FeedbackTypes.showCanTake,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showTakeRecuePreset,
-				bank: this.getBankOptions(CompanionLabels.showTakeRecuePresetBank),
-				actions: [
+				name: CompanionLabels.showTakeRecuePreset,
+				style: this.getBankOptions(CompanionLabels.showTakeRecuePresetBank),
+				steps: [
 					{
-						action: ActionNames.showTakeRecue,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showTakeRecue,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanTakeRecue,
+						feedbackId: FeedbackTypes.showCanTakeRecue,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showCuePreset,
-				bank: this.getBankOptions(CompanionLabels.showCuePresetBank),
-				actions: [
+				name: CompanionLabels.showCuePreset,
+				style: this.getBankOptions(CompanionLabels.showCuePresetBank),
+				steps: [
 					{
-						action: ActionNames.showCue,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showCue,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanCue,
+						feedbackId: FeedbackTypes.showCanCue,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showRecueOnAirPreset,
-				bank: this.getBankOptions(CompanionLabels.showRecueOnAirPresetBank),
-				actions: [
+				name: CompanionLabels.showRecueOnAirPreset,
+				style: this.getBankOptions(CompanionLabels.showRecueOnAirPresetBank),
+				steps: [
 					{
-						action: ActionNames.showRecueOnAir,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showRecueOnAir,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanRecueOnAir,
+						feedbackId: FeedbackTypes.showCanRecueOnAir,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showClearPreset,
-				bank: this.getBankOptions(CompanionLabels.showClearPresetBank),
-				actions: [
+				name: CompanionLabels.showClearPreset,
+				style: this.getBankOptions(CompanionLabels.showClearPresetBank),
+				steps: [
 					{
-						action: ActionNames.showClear,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showClear,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanClear,
+						feedbackId: FeedbackTypes.showCanClear,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showTakeOutPreset,
-				bank: this.getBankOptions(CompanionLabels.showTakeOutPresetBank),
-				actions: [
+				name: CompanionLabels.showTakeOutPreset,
+				style: this.getBankOptions(CompanionLabels.showTakeOutPresetBank),
+				steps: [
 					{
-						action: ActionNames.showTakeOut,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showTakeOut,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanTakeOut,
+						feedbackId: FeedbackTypes.showCanTakeOut,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.showTakeOutRecuePreset,
-				bank: this.getBankOptions(CompanionLabels.showTakeOutRecuePresetBank),
-				actions: [
+				name: CompanionLabels.showTakeOutRecuePreset,
+				style: this.getBankOptions(CompanionLabels.showTakeOutRecuePresetBank),
+				steps: [
 					{
-						action: ActionNames.showTakeOutRecue,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.showTakeOutRecue,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.showCanTakeOutRecue,
+						feedbackId: FeedbackTypes.showCanTakeOutRecue,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.playlistRestartPreset,
-				bank: this.getBankOptions(CompanionLabels.playlistRestartPresetBank),
-				actions: [
+				name: CompanionLabels.playlistRestartPreset,
+				style: this.getBankOptions(CompanionLabels.playlistRestartPresetBank),
+				steps: [
 					{
-						action: ActionNames.playlistRestart,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.playlistRestart,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.playlistCanRestart,
+						feedbackId: FeedbackTypes.playlistCanRestart,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.playlistActivatePreset,
-				bank: this.getBankOptions(CompanionLabels.playlistActivatePresetBank),
-				actions: [
+				name: CompanionLabels.playlistActivatePreset,
+				style: this.getBankOptions(CompanionLabels.playlistActivatePresetBank),
+				steps: [
 					{
-						action: ActionNames.playlistActivate,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.playlistActivate,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.playlistCanActivate,
+						feedbackId: FeedbackTypes.playlistCanActivate,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.macroExecutePreset,
-				bank: this.getBankOptions(CompanionLabels.macroExecutePresetBank),
-				actions: [
+				name: CompanionLabels.macroExecutePreset,
+				style: this.getBankOptions(CompanionLabels.macroExecutePresetBank),
+				steps: [
 					{
-						action: ActionNames.macroExecute,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.macroExecute,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.macroCanExecute,
+						feedbackId: FeedbackTypes.macroCanExecute,
 						options: this.getFakeOption(),
 					},
 				],
 			},
 			{
+				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
-				label: CompanionLabels.windowSetLayoutPreset,
-				bank: this.getBankOptions(CompanionLabels.windowSetLayoutPresetBank),
-				actions: [
+				name: CompanionLabels.windowSetLayoutPreset,
+				style: this.getBankOptions(CompanionLabels.windowSetLayoutPresetBank),
+				steps: [
 					{
-						action: ActionNames.windowSetLayout,
-						options: this.getFakeOption(),
+						down: [
+							{
+								actionId: ActionNames.windowSetLayout,
+								options: this.getFakeOption(),
+							}
+						],
+						up: []
 					},
 				],
 				feedbacks: [
 					{
-						type: FeedbackTypes.windowCanSetLayout,
+						feedbackId: FeedbackTypes.windowCanSetLayout,
 						options: this.getFakeOption(),
 					},
 				],
@@ -206,13 +274,12 @@ export class PresetsProvider {
 		}
 	}
 
-	getBankOptions(text: string): CompanionBankPreset {
+	getBankOptions(text: string): CompanionButtonStyleProps {
 		return {
-			style: Types.text,
 			text: text,
 			size: 'auto',
 			color: 16777215,
-			bgcolor: this.drModuleInstance.rgb(0, 204, 0),
+			bgcolor: combineRgb(0, 204, 0),
 		}
 	}
 }
