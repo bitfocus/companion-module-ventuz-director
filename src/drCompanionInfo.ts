@@ -1,3 +1,5 @@
+import { CompanionOptionValues } from "@companion-module/base"
+
 export interface DrActionInfo {
 	id: string
 	command: string
@@ -13,6 +15,7 @@ export interface DrFeedbackInfo {
 	can: boolean
 	statusCommand: string
 	responseCode: number,
+	options: CompanionOptionValues
 }
 
 export interface DrCompanionInfo {

@@ -1,4 +1,4 @@
-import { CompanionFeedbackInfo, InputValue, SomeCompanionActionInputField, SomeCompanionFeedbackInputField } from '@companion-module/base'
+import { CompanionFeedbackInfo, CompanionOptionValues, InputValue, SomeCompanionActionInputField, SomeCompanionFeedbackInputField } from '@companion-module/base'
 import { DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.';
@@ -191,13 +191,14 @@ function createOrOption(): SomeCompanionInputField {
 
 export function startStatusTimer(
 	drModuleInstance: DRModuleInstance,
-	feedback: CompanionFeedbackInfo,
+	feedbackId: string,
+	options: CompanionOptionValues,
 	statusCommand: string,
 	requestId: number
 ) {
 	const sendTimer = setInterval(async () => {
 		const message = JSON.stringify(
-			await buildRequestMsg(feedback.type, feedback.options, statusCommand, requestId, drModuleInstance)
+			await buildRequestMsg(feedbackId, options, statusCommand, requestId, drModuleInstance)
 		)
 		// 1 === WebSocket OPEN
 		if (drModuleInstance.wsClient && drModuleInstance.wsClient.readyState === 1) {

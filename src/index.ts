@@ -81,7 +81,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 			)
 		}
 		this.wsClient.onmessage = (event) => {
-			console.log("VENTUZ: Received: '" + event.data.toString() + "'")
+			// console.log("VENTUZ: Received: '" + event.data.toString() + "'")
 			const json = JSON.parse(event.data.toString())
 
 			//Change status if websocket is disabled in Director.
@@ -96,15 +96,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 			
 			if (drFeedbackInfoFound) {
 				drFeedbackInfoFound.responseCode = json.Code as number;
-				console.log(drFeedbackInfoFound.responseCode, "responseCode");
 				const index = this.feedbacksProvider.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
 				if (index !== -1) {
-					console.log(index, "indexFound");
-					console.log(drFeedbackInfoFound, "drFeedbackInfoFound");
-					console.log(drFeedbackInfoFound, "----------------------------------");
-					const t = this.drCompanionInfos.find(drc => drc.drFeedbackInfo.requestId === +(json.RequestID as string));
-					console.log(t, "fromCompanion");
-					// this.feedbacksProvider.drFeedbackInfos[index].;
 					this.checkFeedbacksById(drFeedbackInfoFound.id)
 				}
 			}
@@ -117,11 +110,12 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 				drCompanionInfo.drActionInfo.isRunning = false
 				if (drCompanionInfo.drFeedbackInfo) {
 					//If it already has a feedback created then restart the timer
-					const ff = [].find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
+					const ff = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
 					if (ff) {
 						drCompanionInfo.drFeedbackInfo.statusTimer = startStatusTimer(
 							this,
-							ff,
+							drCompanionInfo.drFeedbackInfo.feedbackId,
+							drCompanionInfo.drFeedbackInfo.options,
 							drCompanionInfo.drFeedbackInfo.statusCommand,
 							drCompanionInfo.drFeedbackInfo.requestId
 						)

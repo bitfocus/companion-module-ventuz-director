@@ -70,7 +70,8 @@ export class FeedbacksProvider {
 				description: CompanionLabels.showCanTakeDescription,
 				options: getShowTakeOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
-					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId())
+					const rid = this.drModuleInstance.getRequestId()
+					this.subscribeFeedback(feedback, DRCommands.showCanTake, rid)
 				},
 				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
@@ -283,7 +284,8 @@ export class FeedbacksProvider {
 			//Always creating new drFeedbackInfo
 			id: feedback.id,
 			feedbackId: feedback.feedbackId,
-			statusTimer: startStatusTimer(this.drModuleInstance, feedback, statusCommand, requestId),
+			options: feedback.options,
+			statusTimer: startStatusTimer(this.drModuleInstance, feedback.feedbackId, feedback.options, statusCommand, requestId),
 			requestId: requestId,
 			can: false,
 			statusCommand: statusCommand,
@@ -300,7 +302,6 @@ export class FeedbacksProvider {
 				return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
 			} else {
 				const drFeedbackInfoFound = drCompanionInfo?.drFeedbackInfo
-				console.log(drFeedbackInfoFound?.responseCode, "code")
 				if (drFeedbackInfoFound) {	
 					if (drFeedbackInfoFound.responseCode === 0) {
 						can = true
@@ -328,7 +329,6 @@ export class FeedbacksProvider {
 		//Creating a feedback Info always
 		const drFeedbackInfoFound = this.drFeedbackInfos.find((f) => f.id === feedback.id)
 		if (drFeedbackInfoFound) {
-			console.log("exists")
 			//When dropping Presets, callback is called before subscription, thats why here we check for drFeedbackInfo to be truthy so that we don't add drCompanionInfo with both drActionInfo and drFeedbackInfo as undefined.
 
 			const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
@@ -336,11 +336,9 @@ export class FeedbacksProvider {
 			)
 			if (drCompanionInfoFound) {
 				//Only add
-				console.log("Add")
 				if (!drCompanionInfoFound.drFeedbackInfo) {
 					drCompanionInfoFound.drFeedbackInfo = drFeedbackInfoFound
 				} else {
-					console.log("??")
 
 					//console.log(`VENTUZ: The following drFeedbackInfo already exists  in drCompanionInfo:`, drCompanionInfoFound) //Printing the entire object so that we can catch errors better - COMMENTED TO AVOID EXTRA TRAFFIC
 				}
