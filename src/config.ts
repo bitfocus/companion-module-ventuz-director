@@ -1,5 +1,5 @@
-import InstanceSkel = require('../../../instance_skel')
-import { SomeCompanionConfigField } from '../../../instance_skel_types'
+// import InstanceSkel = require('../../../instance_skel')
+// import { SomeCompanionConfigField } from '../../../instance_skel_types'
 import { CompanionLabels, Types } from './labels'
 
 export interface DRModuleConfig {
@@ -12,7 +12,7 @@ export interface DRModuleConfig {
 export function getConfigFields(self: InstanceSkel<DRModuleConfig>): SomeCompanionConfigField[] {
 	return [
 		{
-			type: Types.text,
+			type: Types.staticText,
 			id: 'info',
 			width: 12,
 			label: CompanionLabels.infoLabel,
