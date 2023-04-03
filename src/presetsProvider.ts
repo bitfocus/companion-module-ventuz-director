@@ -1,4 +1,4 @@
-import { CompanionButtonPresetDefinition, CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, combineRgb } from '@companion-module/base'
+import { CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, combineRgb } from '@companion-module/base'
 import DRModuleInstance = require('.')
 // import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
@@ -9,9 +9,9 @@ export class PresetsProvider {
 	constructor(drModuleInstance: DRModuleInstance) {
 		this.drModuleInstance = drModuleInstance
 	}
-	getPresets(): CompanionButtonPresetDefinition[]  {
-		return [
-			{
+	getPresets(): CompanionPresetDefinitions  {
+		return {
+			[CompanionLabels.showTakePreset]: {
 				
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
@@ -35,7 +35,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showTakeRecuePreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showTakeRecuePreset,
@@ -58,7 +58,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showCuePreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showCuePreset,
@@ -81,7 +81,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showRecueOnAirPreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showRecueOnAirPreset,
@@ -104,7 +104,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showClearPreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showClearPreset,
@@ -127,7 +127,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showTakeOutPreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showTakeOutPreset,
@@ -150,7 +150,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.showTakeOutRecuePreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showTakeOutRecuePreset,
@@ -173,7 +173,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.playlistRestartPreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.playlistRestartPreset,
@@ -196,7 +196,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.playlistActivatePreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.playlistActivatePreset,
@@ -219,7 +219,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.macroExecutePreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.macroExecutePreset,
@@ -242,7 +242,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-			{
+			[CompanionLabels.windowSetLayoutPreset]: {
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.windowSetLayoutPreset,
@@ -265,7 +265,7 @@ export class PresetsProvider {
 					},
 				],
 			},
-		]
+		}
 	}
 	// This fake option is a hack because it is mandatory to provide a value in the options array.
 	getFakeOption(): { [key: string]: InputValue } {

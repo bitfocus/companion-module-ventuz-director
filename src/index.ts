@@ -1,8 +1,9 @@
-import instance_skel = require('../../../instance_skel')
-import {
-	CompanionConfigField,
-	CompanionSystem,
-} from '../../../instance_skel_types'
+// import instance_skel = require('../../../instance_skel')
+// import {
+// 	CompanionConfigField,
+// 	CompanionSystem,
+// } from '../../../instance_skel_types'
+import { CompanionConfigField, InstanceBase, InstanceStatus, SomeCompanionConfigField, runEntrypoint } from '@companion-module/base'
 import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
 import { DrCompanionInfo } from './drCompanionInfo'
@@ -11,7 +12,8 @@ import { getFeedbackFromRequestId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
 const WebSocket = require('ws')
 
-class DRModuleInstance extends instance_skel<DRModuleConfig> {
+export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
+	config: DRModuleConfig
 	requestIdCounter: number
 	wsClient: WebSocket
 	drCompanionInfos: DrCompanionInfo[]
@@ -21,26 +23,33 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 	reconectionTimer: NodeJS.Timer
 	//Constrtuctor
 	//See https://github.com/bitfocus/companion/wiki/instance_skel
-	constructor(system: CompanionSystem, id: string, config: DRModuleConfig) {
-		super(system, id, config)
+	constructor(internal: unknown) {
+		super(internal)
 		this.drCompanionInfos = []
 		this.requestIdCounter = 0
 		this.actionsProvider = new ActionsProvider(this)
 		this.feedbacksProvider = new FeedbacksProvider(this)
 		this.presetsProvider = new PresetsProvider(this)
-		this.initActions()
-		this.initFeedbacks()
-		this.initPresets()
+		this.config = {};
 		console.log('VENTUZ: Create Instance')
 	}
 	//Main initialization function called once the module is OK to start doing things. Principally, this is when the module should establish a connection to the device.
-	init() {
-		console.log('VENTUZ: Init')
-		this.initWebSocket()
-		this.startReconnectionTimer(this.config.intervalReconnection)
+	async init(config: DRModuleConfig, isFirstInit: boolean) {
+		this.config = config;
+		if (isFirstInit) {
+			this.initActions()
+			this.initFeedbacks()
+			this.initPresets()
+		}
+		else {
+			console.log('VENTUZ: Init')
+			this.initWebSocket()
+			this.startReconnectionTimer(this.config.intervalReconnection)
+		}
 	}
+
 	initActions() {
-		this.setActions(this.actionsProvider.getActions())
+		this.setActionDefinitions(this.actionsProvider.getActions())
 	}
 	initFeedbacks() {
 		this.setFeedbackDefinitions(this.feedbacksProvider.getFeedbacks())
@@ -51,27 +60,27 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 
 	initWebSocket() {
 		console.log('VENTUZ: Create Websocket')
-		this.status(this.STATUS_WARNING, 'Connecting...')
+		this.updateStatus(InstanceStatus.Connecting, 'Connecting...')
 		this.wsClient = new WebSocket(
 			`ws://${this.config.host}:${this.config.port}/DirectorRemoting_Service/1.0/commands/ws`
 		)
 
 		this.wsClient.onopen = (event) => {
 			console.log('VENTUZ: Connected')
-			this.status(this.STATUS_OK)
+			this.updateStatus(InstanceStatus.Ok)
 			this.subscribeActionsAndFeedbacks()
 		}
 		this.wsClient.onerror = (event: Event) => {
-			//this.status(this.STATUS_ERROR, `Disconnected, reconnection will be attempted in ${this.config.intervalReconnection} second(s)`)
+			//this.updateStatus(this.STATUS_ERROR, `Disconnected, reconnection will be attempted in ${this.config.intervalReconnection} second(s)`)
 			console.log(event)
 		}
 		this.wsClient.onclose = (event) => {
 			//console.log('VENTUZ: Connection Closed: ' + JSON.stringify(event))
-			//this.status(this)
+			//this.updateStatus(this)
 			console.log('VENTUZ: Connection Closed')
 			this.unsubscribeActionsAndFeedbacks()
-			this.status(
-				this.STATUS_ERROR,
+			this.updateStatus(
+				InstanceStatus.ConnectionFailure,
 				`Disconnected, reconnection will be attempted in ${this.config.intervalReconnection} second(s)`
 			)
 		}
@@ -81,15 +90,15 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 
 			//Change status if websocket is disabled in Director.
 			if ((json.Errors as any[]).some((e) => e.Message === "'Websocket' connection is disabled")) {
-				this.status(this.STATUS_ERROR, `'Websocket' connection is disabled in Director`)
+				this.updateStatus(InstanceStatus.ConnectionFailure, `'Websocket' connection is disabled in Director`)
 			} else {
-				this.status(this.STATUS_OK)
+				this.updateStatus(InstanceStatus.Ok)
 			}
 
 			const feedbackFound = getFeedbackFromRequestId(
 				+(json.RequestID as string),
 				this.feedbacksProvider.drFeedbackInfos,
-				this.getAllFeedbacks()
+				[] //TODO
 			) //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Unary_plus
 			if (feedbackFound) {
 				feedbackFound.options.currentStatus = json.Code.toString()
@@ -104,7 +113,7 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 				drCompanionInfo.drActionInfo.isRunning = false
 				if (drCompanionInfo.drFeedbackInfo) {
 					//If it already has a feedback created then restart the timer
-					const ff = this.getAllFeedbacks().find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
+					const ff = [].find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
 					if (ff) {
 						drCompanionInfo.drFeedbackInfo.statusTimer = startStatusTimer(
 							this,
@@ -118,7 +127,7 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 		}
 	}
 	//Clean up the instance before it is destroyed. This is called both on shutdown and when an instance is disabled or deleted. Destroy any timers and socket connections here.
-	destroy() {
+	async destroy() {
 		console.log('VENTUZ: Destroy')
 		this.stopReconectionTimer()
 		this.closeWebSocket()
@@ -133,12 +142,14 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 	}
 
 	//Provide a simple return of the necessary fields for the instance configuration screen.
-	config_fields(): CompanionConfigField[] {
+	getConfigFields(): SomeCompanionConfigField[] {
 		console.log('VENTUZ: Get Config')
-		return getConfigFields(this)
+		return getConfigFields()
 	}
 	//When the instance configuration is saved by the user, this update will fire with the new configuration passed. The configuration should be saved to the module, as shown below. This is also a good time to check for any important changes, such as the device IP, which require runtime changes or updates based on the new configuration. An example of resetting a TCP connection is shown in the full sample below.
-	updateConfig(config: DRModuleConfig): void {
+
+	async configUpdated(config: DRModuleConfig) {
+		
 		if (this.config.intervalReconnection != config.intervalReconnection) {
 			//Resets timer if the interval reconnection changed
 			this.stopReconectionTimer()
@@ -181,4 +192,5 @@ class DRModuleInstance extends instance_skel<DRModuleConfig> {
 		}
 	}
 }
-export = DRModuleInstance
+
+runEntrypoint(DRModuleInstance, [])
