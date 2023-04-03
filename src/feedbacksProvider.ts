@@ -1,5 +1,6 @@
+import { CompanionFeedbackDefinitions, CompanionFeedbackInfo, combineRgb } from '@companion-module/base'
 import DRModuleInstance = require('.')
-import { CompanionFeedbackEvent, CompanionFeedbackEventInfo, CompanionFeedbacks } from '../../../instance_skel_types'
+// import { CompanionFeedbackEvent, CompanionFeedbackEventInfo, CompanionFeedbacks } from '../../../instance_skel_types'
 import { DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import {
 	createOption,
@@ -25,7 +26,7 @@ export class FeedbacksProvider {
 		this.drModuleInstance = drModuleInstance
 		this.drFeedbackInfos = []
 	}
-	getFeedbacks(): CompanionFeedbacks {
+	getFeedbacks(): CompanionFeedbackDefinitions {
 		return {
 			// CheckStatusResponse: {
 			//     type: 'boolean',
@@ -65,52 +66,52 @@ export class FeedbacksProvider {
 			// },
 			[FeedbackTypes.showCanTake]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanTake,
+				name: CompanionLabels.showCanTake,
 				description: CompanionLabels.showCanTakeDescription,
 				options: getShowTakeOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanTakeRecue]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanTakeRecue,
+				name: CompanionLabels.showCanTakeRecue,
 				description: CompanionLabels.showCanTakeRecueDescription,
 				options: getShowTakeOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.take" status command, as there is no "show.can.takerecue" command in Director Remoting it is not necessary
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanCue]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanCue,
+				name: CompanionLabels.showCanCue,
 				description: CompanionLabels.showCanCueDescription,
 				options: getShowCueOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCue, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanCueChannel]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanCueChannel,
+				name: CompanionLabels.showCanCueChannel,
 				description: CompanionLabels.showCanCueChannelDescription,
 				options: [
 					createOption(
@@ -123,140 +124,140 @@ export class FeedbacksProvider {
 						0
 					),
 				],
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCueChannel, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanRecueOnAir]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanRecueOnAir,
+				name: CompanionLabels.showCanRecueOnAir,
 				description: CompanionLabels.showCanRecueOnAirDescription,
 				options: getShowRecueOnAirOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanRecueOnAir, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanClear]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanClear,
+				name: CompanionLabels.showCanClear,
 				description: CompanionLabels.showCanClearDescription,
 				options: getShowClearOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanClear, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanTakeOut]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanTakeOut,
+				name: CompanionLabels.showCanTakeOut,
 				description: CompanionLabels.showCanTakeOutDescription,
 				options: getShowTakeOutOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.showCanTakeOutRecue]: {
 				type: Types.advanced,
-				label: CompanionLabels.showCanTakeOutRecue,
+				name: CompanionLabels.showCanTakeOutRecue,
 				description: CompanionLabels.showCanTakeOutRecueDescription,
 				options: getShowTakeOutOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.takeout" status command, as there is no "show.can.takeoutrecue" command in Director Remoting it is not necessary
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.playlistCanRestart]: {
 				type: Types.advanced,
-				label: CompanionLabels.playlistCanRestart,
+				name: CompanionLabels.playlistCanRestart,
 				description: CompanionLabels.playlistCanRestartDescription,
 				options: getPlaylistRestartOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanRestart, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.playlistCanActivate]: {
 				type: Types.advanced,
-				label: CompanionLabels.playlistCanActivate,
+				name: CompanionLabels.playlistCanActivate,
 				description: CompanionLabels.playlistCanActivateDescription,
 				options: getPlaylistActivateOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanActivate, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.macroCanExecute]: {
 				type: Types.advanced,
-				label: CompanionLabels.macroCanExecute,
+				name: CompanionLabels.macroCanExecute,
 				description: CompanionLabels.macroCanExecuteDescription,
 				options: getMacroExecuteOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.macroCanExecute, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			},
 			[FeedbackTypes.windowCanSetLayout]: {
 				type: Types.advanced,
-				label: CompanionLabels.windowCanSetLayout,
+				name: CompanionLabels.windowCanSetLayout,
 				description: CompanionLabels.windowCanSetLayoutDescription,
 				options: getWindowSetLayoutOptions(),
-				subscribe: (feedback: CompanionFeedbackEvent) => {
+				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.windowCanSetLayout, this.drModuleInstance.getRequestId())
 				},
-				unsubscribe: (feedback: CompanionFeedbackEvent) => {
+				unsubscribe: (feedback: CompanionFeedbackInfo) => {
 					this.unsubscribeFeedback(feedback)
 				},
-				callback: (feedback: CompanionFeedbackEvent, bank, info: CompanionFeedbackEventInfo) => {
-					return this.handleStatusFeedback(feedback, info)
+				callback: (feedback: CompanionFeedbackInfo) => {
+					return this.handleStatusFeedback(feedback)
 				},
 			}
 		}
 	}
 
-	private unsubscribeFeedback(feedback: CompanionFeedbackEvent) {
+	private unsubscribeFeedback(feedback: CompanionFeedbackInfo) {
 		const feedbackIndex = this.drFeedbackInfos.findIndex((fd) => fd.id === feedback.id)
 		if (feedbackIndex != -1) {
 			const drFeedbackInfoFound = this.drFeedbackInfos[feedbackIndex]
@@ -277,11 +278,11 @@ export class FeedbacksProvider {
 		}
 	}
 
-	private subscribeFeedback(feedback: CompanionFeedbackEvent, statusCommand: string, requestId: number) {
+	private subscribeFeedback(feedback: CompanionFeedbackInfo, statusCommand: string, requestId: number) {
 		this.drFeedbackInfos.push({
 			//Always creating new drFeedbackInfo
 			id: feedback.id,
-			type: feedback.type,
+			feedbackId: feedback.feedbackId,
 			statusTimer: startStatusTimer(this.drModuleInstance, feedback, statusCommand, requestId),
 			requestId: requestId,
 			can: false,
@@ -289,13 +290,13 @@ export class FeedbacksProvider {
 		})
 	}
 
-	private handleStatusFeedback(feedback: CompanionFeedbackEvent, info: CompanionFeedbackEventInfo) {
+	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {
 		let can: boolean
 		const processFeedback = (drCompanionInfo: DrCompanionInfo) => {
 			//debugger;
 			if (drCompanionInfo?.drActionInfo?.isRunning) {
 				can = false
-				return { bgcolor: this.drModuleInstance.rgb(255, 255, 0) } //Yellow color (aka "is running")
+				return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
 			} else {
 				if (feedback.options.currentStatus === '0') {
 					can = true
@@ -310,7 +311,7 @@ export class FeedbacksProvider {
 					// cannot be performed because status code is not "0"
 					feedback.options.currentCode = undefined
 					can = false
-					return { bgcolor: this.drModuleInstance.rgb(255, 0, 0) } //Red color (aka "cannot perform")
+					return { bgcolor: combineRgb(255, 0, 0) } //Red color (aka "cannot perform")
 				}
 			}
 		}
@@ -319,39 +320,33 @@ export class FeedbacksProvider {
 		const drFeedbackInfoFound = this.drFeedbackInfos.find((f) => f.id === feedback.id)
 		if (drFeedbackInfoFound) {
 			//When dropping Presets, callback is called before subscription, thats why here we check for drFeedbackInfo to be truthy so that we don't add drCompanionInfo with both drActionInfo and drFeedbackInfo as undefined.
-			//IMPORTANT!
-			//Always convert the value of the bank and page to number because it can come as a string, if you don't do it you can have duplicates in the drCompanionInfos.
-			if (isNumber(info.bank) && isNumber(info.page)) {
-				const numberBank: number = Number(info.bank)
-				const numberPage: number = Number(info.page)
 
-				const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
-					(d) => d.bank === numberBank && d.page === numberPage
-				)
-				if (drCompanionInfoFound) {
-					//Only add
-					if (!drCompanionInfoFound.drFeedbackInfo) {
-						drCompanionInfoFound.drFeedbackInfo = drFeedbackInfoFound
-					} else {
-						//console.log(`VENTUZ: The following drFeedbackInfo already exists  in drCompanionInfo:`, drCompanionInfoFound) //Printing the entire object so that we can catch errors better - COMMENTED TO AVOID EXTRA TRAFFIC
-					}
-					const styledObj = processFeedback(drCompanionInfoFound)
-					drCompanionInfoFound.drFeedbackInfo.can = can
-					return styledObj
+			const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
+				(d) => d.controlId === feedback.controlId
+			)
+			if (drCompanionInfoFound) {
+				//Only add
+				if (!drCompanionInfoFound.drFeedbackInfo) {
+					drCompanionInfoFound.drFeedbackInfo = drFeedbackInfoFound
 				} else {
-					//Create one
-					const newDrCompanionInfo: DrCompanionInfo = {
-						page: numberPage,
-						bank: numberBank,
-						drActionInfo: undefined,
-						drFeedbackInfo: drFeedbackInfoFound,
-					}
-					this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
-					const styledObj = processFeedback(drCompanionInfoFound)
-					drCompanionInfoFound.drFeedbackInfo.can = can
-					return styledObj
+					//console.log(`VENTUZ: The following drFeedbackInfo already exists  in drCompanionInfo:`, drCompanionInfoFound) //Printing the entire object so that we can catch errors better - COMMENTED TO AVOID EXTRA TRAFFIC
 				}
+				const styledObj = processFeedback(drCompanionInfoFound)
+				drCompanionInfoFound.drFeedbackInfo.can = can
+				return styledObj
+			} else {
+				//Create one
+				const newDrCompanionInfo: DrCompanionInfo = {
+					controlId: feedback.controlId,
+					drActionInfo: undefined,
+					drFeedbackInfo: drFeedbackInfoFound,
+				}
+				this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
+				const styledObj = processFeedback(drCompanionInfoFound)
+				drCompanionInfoFound.drFeedbackInfo.can = can
+				return styledObj
 			}
+			
 		}
 	}
 }
