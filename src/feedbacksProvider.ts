@@ -1,4 +1,5 @@
 import { CompanionFeedbackDefinitions, CompanionFeedbackInfo, SomeCompanionFeedbackInputField, combineRgb } from '@companion-module/base'
+import DRModuleInstance = require('.')
 // import { CompanionFeedbackEvent, CompanionFeedbackEventInfo, CompanionFeedbacks } from '../../../instance_skel_types'
 import { DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import {
@@ -17,7 +18,6 @@ import {
 	stopStatusTimer,
 } from './helpers'
 import { CompanionLabels, DRCommands, DRProperties, FeedbackTypes, Types } from './labels'
-import { DRModuleInstance } from '.'
 
 export class FeedbacksProvider {
 	private drModuleInstance: DRModuleInstance

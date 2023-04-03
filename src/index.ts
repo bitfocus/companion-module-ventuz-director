@@ -10,6 +10,7 @@ import { DrCompanionInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
 import { getFeedbackFromRequestId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
+const WebSocket = require('ws')
 
 export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	config: DRModuleConfig

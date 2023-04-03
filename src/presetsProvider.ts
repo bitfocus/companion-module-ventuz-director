@@ -1,7 +1,7 @@
 import { CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, combineRgb } from '@companion-module/base'
+import DRModuleInstance = require('.')
 // import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
-import { DRModuleInstance } from '.'
 
 export class PresetsProvider {
 	private drModuleInstance: DRModuleInstance
