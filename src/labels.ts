@@ -268,7 +268,7 @@ export const Types = {
 	checkbox: 'checkbox',
 	number: 'number',
 	dropdown: 'dropdown',
-	staticText: 'static-text',
+	text: 'text',
 	textwithvariables: 'textwithvariables',
 	advanced: 'advanced',
 } as const
