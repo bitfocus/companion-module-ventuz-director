@@ -15,7 +15,8 @@ export interface DrFeedbackInfo {
 }
 
 export interface DrCompanionInfo {
-	controlId: string,
+	page?: number
+	bank?: number
 	drFeedbackInfo: DrFeedbackInfo
 	drActionInfo: DrActionInfo
 }
