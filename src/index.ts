@@ -10,6 +10,7 @@ import { DrCompanionInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
 import { getFeedbackFromRequestId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
+import WebSocket = require('ws')
 
 export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	config: DRModuleConfig
@@ -69,7 +70,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 			this.updateStatus(InstanceStatus.Ok)
 			this.subscribeActionsAndFeedbacks()
 		}
-		this.wsClient.onerror = (event: Event) => {
+		this.wsClient.onerror = (event: WebSocket.ErrorEvent) => {
 			//this.updateStatus(this.STATUS_ERROR, `Disconnected, reconnection will be attempted in ${this.config.intervalReconnection} second(s)`)
 			console.log(event)
 		}
