@@ -8,7 +8,7 @@ import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
 import { DrCompanionInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
-import { getFeedbackFromRequestId, startStatusTimer } from './helpers'
+import { startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
 import WebSocket = require('ws')
 
@@ -91,14 +91,22 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 				this.updateStatus(InstanceStatus.Ok)
 			}
 
-			const feedbackFound = getFeedbackFromRequestId(
-				+(json.RequestID as string),
-				this.feedbacksProvider.drFeedbackInfos,
-				[] //TODO
-			) //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Unary_plus
-			if (feedbackFound) {
-				feedbackFound.options.currentStatus = json.Code.toString()
-				this.checkFeedbacksById(feedbackFound.id)
+			
+			const drFeedbackInfoFound =  this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.requestId === +(json.RequestID as string))
+			
+			if (drFeedbackInfoFound) {
+				drFeedbackInfoFound.responseCode = json.Code as number;
+				console.log(drFeedbackInfoFound.responseCode, "responseCode");
+				const index = this.feedbacksProvider.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
+				if (index !== -1) {
+					console.log(index, "indexFound");
+					console.log(drFeedbackInfoFound, "drFeedbackInfoFound");
+					console.log(drFeedbackInfoFound, "----------------------------------");
+					const t = this.drCompanionInfos.find(drc => drc.drFeedbackInfo.requestId === +(json.RequestID as string));
+					console.log(t, "fromCompanion");
+					// this.feedbacksProvider.drFeedbackInfos[index].;
+					this.checkFeedbacksById(drFeedbackInfoFound.id)
+				}
 			}
 
 			//Check if drCompanionInfos Has this RequestId

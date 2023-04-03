@@ -12,6 +12,7 @@ export interface DrFeedbackInfo {
 	statusTimer: NodeJS.Timer
 	can: boolean
 	statusCommand: string
+	responseCode: number,
 }
 
 export interface DrCompanionInfo {

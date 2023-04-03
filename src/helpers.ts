@@ -389,20 +389,6 @@ export async function buildRequestMsg(
 	}
 }
 
-export function getFeedbackFromRequestId(
-	requestId: number,
-	drFeedbackInfos: DrFeedbackInfo[],
-	companionFeedbacks: CompanionFeedbackInfo[]
-) {
-	const drFeedbackInfoFound = drFeedbackInfos.find((fd) => fd.requestId === requestId)
-	if (drFeedbackInfoFound) {
-		//Feedback with that id exists
-		const feedbackFound = companionFeedbacks.find((fd) => fd.id === drFeedbackInfoFound.id)
-		return feedbackFound
-	}
-	return undefined
-}
-
 export function isNumber(value: string | number): boolean {
 	return value != null && value !== '' && !isNaN(Number(value.toString()))
 }

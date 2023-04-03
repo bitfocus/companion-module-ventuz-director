@@ -648,7 +648,7 @@ export class ActionsProvider {
 
 	private unsubscribeAction(action: CompanionActionEvent) {
 		const index = this.drActionInfos.findIndex((a) => a.id === action.id)
-		if (index != -1) {
+		if (index !== -1) {
 			//Delete from action infos array:
 			this.drActionInfos.splice(index, 1)
 			//Assign undefined in the drCompanionInfoFound
@@ -656,7 +656,7 @@ export class ActionsProvider {
 				(dc) => dc.drActionInfo && dc.drActionInfo.id === action.id
 			)
 
-			if (drCompanionInfoIndex != -1) {
+			if (drCompanionInfoIndex !== -1) {
 				const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos[drCompanionInfoIndex]
 				drCompanionInfoFound.drActionInfo = undefined
 				//Delete drCompanionInfo if drFeedbackInfo is undefined too
