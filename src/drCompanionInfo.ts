@@ -7,7 +7,7 @@ export interface DrActionInfo {
 
 export interface DrFeedbackInfo {
 	id: string
-	feedbackId: string
+	type: string
 	requestId: number
 	statusTimer: NodeJS.Timer
 	can: boolean
