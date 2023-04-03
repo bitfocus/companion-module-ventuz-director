@@ -1,19 +1,25 @@
+import { CompanionFeedbackAdvancedEvent, CompanionFeedbackInfo, InputValue, SomeCompanionActionInputField, SomeCompanionFeedbackInputField } from '@companion-module/base'
 import DRModuleInstance = require('.')
-import { CompanionFeedbackEvent, InputValue, SomeCompanionInputField } from '../../../instance_skel_types'
 import { DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
 
-export function createOption(
-	type,
-	id,
-	label = undefined,
-	defaultValue = undefined,
-	tooltip = undefined,
-	required = true,
-	min = undefined
-) {
+type SomeCompanionInputField = SomeCompanionActionInputField | SomeCompanionFeedbackInputField;
+
+export function createOption(type, id, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): SomeCompanionInputField {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
+	if (type === Types.textwithvariables) {
+
+		return {
+			type: Types.textInput,
+			id: id,
+			label: label,
+			default: defaultValue && defaultValue,
+			tooltip: tooltip,
+			required: required,
+			useVariables: true
+		}
+	}
 	return {
 		type: type,
 		id: id,
@@ -180,12 +186,12 @@ export function getWindowSetLayoutOptions(): SomeCompanionInputField[] {
 }
 
 function createOrOption(): SomeCompanionInputField {
-	return createOption(Types.text, CompanionLabels.or)
+	return createOption(Types.staticText, CompanionLabels.or)
 }
 
 export function startStatusTimer(
 	drModuleInstance: DRModuleInstance,
-	feedback: CompanionFeedbackEvent,
+	feedback: CompanionFeedbackInfo,
 	statusCommand: string,
 	requestId: number
 ) {
@@ -356,7 +362,7 @@ export function buildRequestMsg(
 
 	function getTextWithVariableValue(inputValue: InputValue): string {
 		let value: string = undefined
-		drModuleInstance.parseVariables(inputValue.toString(), (v) => (value = v))
+		drModuleInstance.parseVariablesInString(inputValue.toString(), (v) => (value = v))
 		return value
 	}
 
@@ -379,6 +385,7 @@ export function buildRequestMsg(
 				//booleans and othertypoes are set if they are not null
 				msg[optionId] = optionValue
 			}
+
 		}
 	}
 }
@@ -386,7 +393,7 @@ export function buildRequestMsg(
 export function getFeedbackFromRequestId(
 	requestId: number,
 	drFeedbackInfos: DrFeedbackInfo[],
-	companionFeedbacks: CompanionFeedbackEvent[]
+	companionFeedbacks: CompanionFeedbackInfo[]
 ) {
 	const drFeedbackInfoFound = drFeedbackInfos.find((fd) => fd.requestId === requestId)
 	if (drFeedbackInfoFound) {

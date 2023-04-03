@@ -1,4 +1,4 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackInfo, combineRgb } from '@companion-module/base'
+import { CompanionFeedbackDefinitions, CompanionFeedbackInfo, SomeCompanionFeedbackInputField, combineRgb } from '@companion-module/base'
 import DRModuleInstance = require('.')
 // import { CompanionFeedbackEvent, CompanionFeedbackEventInfo, CompanionFeedbacks } from '../../../instance_skel_types'
 import { DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
@@ -68,7 +68,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTake,
 				description: CompanionLabels.showCanTakeDescription,
-				options: getShowTakeOptions(),
+				options: getShowTakeOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId())
 				},
@@ -83,7 +83,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeRecue,
 				description: CompanionLabels.showCanTakeRecueDescription,
-				options: getShowTakeOptions(),
+				options: getShowTakeOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.take" status command, as there is no "show.can.takerecue" command in Director Remoting it is not necessary
 				},
@@ -98,7 +98,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanCue,
 				description: CompanionLabels.showCanCueDescription,
-				options: getShowCueOptions(),
+				options: getShowCueOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCue, this.drModuleInstance.getRequestId())
 				},
@@ -122,7 +122,7 @@ export class FeedbacksProvider {
 						undefined,
 						false,
 						0
-					),
+					) as SomeCompanionFeedbackInputField,
 				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCueChannel, this.drModuleInstance.getRequestId())
@@ -138,7 +138,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanRecueOnAir,
 				description: CompanionLabels.showCanRecueOnAirDescription,
-				options: getShowRecueOnAirOptions(),
+				options: getShowRecueOnAirOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanRecueOnAir, this.drModuleInstance.getRequestId())
 				},
@@ -153,7 +153,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanClear,
 				description: CompanionLabels.showCanClearDescription,
-				options: getShowClearOptions(),
+				options: getShowClearOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanClear, this.drModuleInstance.getRequestId())
 				},
@@ -168,7 +168,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeOut,
 				description: CompanionLabels.showCanTakeOutDescription,
-				options: getShowTakeOutOptions(),
+				options: getShowTakeOutOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId())
 				},
@@ -183,7 +183,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeOutRecue,
 				description: CompanionLabels.showCanTakeOutRecueDescription,
-				options: getShowTakeOutOptions(),
+				options: getShowTakeOutOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.takeout" status command, as there is no "show.can.takeoutrecue" command in Director Remoting it is not necessary
 				},
@@ -198,7 +198,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.playlistCanRestart,
 				description: CompanionLabels.playlistCanRestartDescription,
-				options: getPlaylistRestartOptions(),
+				options: getPlaylistRestartOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanRestart, this.drModuleInstance.getRequestId())
 				},
@@ -213,7 +213,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.playlistCanActivate,
 				description: CompanionLabels.playlistCanActivateDescription,
-				options: getPlaylistActivateOptions(),
+				options: getPlaylistActivateOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanActivate, this.drModuleInstance.getRequestId())
 				},
@@ -228,7 +228,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.macroCanExecute,
 				description: CompanionLabels.macroCanExecuteDescription,
-				options: getMacroExecuteOptions(),
+				options: getMacroExecuteOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.macroCanExecute, this.drModuleInstance.getRequestId())
 				},
@@ -243,7 +243,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.windowCanSetLayout,
 				description: CompanionLabels.windowCanSetLayoutDescription,
-				options: getWindowSetLayoutOptions(),
+				options: getWindowSetLayoutOptions() as SomeCompanionFeedbackInputField[],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.windowCanSetLayout, this.drModuleInstance.getRequestId())
 				},
