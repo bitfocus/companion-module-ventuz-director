@@ -1,11 +1,12 @@
+import { CompanionActionDefinitions, CompanionActionEvent, CompanionInputFieldDropdown } from '@companion-module/base'
 import DRModuleInstance = require('.')
-import {
-	CompanionActionEvent,
-	CompanionActionEventInfo,
-	CompanionActions,
-	CompanionInputFieldDropdown,
-	SomeCompanionConfigField,
-} from '../../../instance_skel_types'
+// import {
+// 	CompanionActionEvent,
+// 	CompanionActionEventInfo,
+// 	CompanionActions,
+// 	CompanionInputFieldDropdown,
+// 	SomeCompanionConfigField,
+// } from '../../../instance_skel_types'
 import { DrActionInfo, DrCompanionInfo } from './drCompanionInfo'
 import {
 	buildRequestMsg,
@@ -47,10 +48,10 @@ export class ActionsProvider {
 		this.drActionInfos = []
 	}
 
-	getActions(): CompanionActions {
+	getActions(): CompanionActionDefinitions {
 		return {
 			[ActionNames.windowFullscreen]: {
-				label: CompanionLabels.windowFullScreen,
+				name: CompanionLabels.windowFullScreen,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.windowFullscreen)
@@ -59,11 +60,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.windowReverse]: {
-				label: CompanionLabels.windowReverse,
+				name: CompanionLabels.windowReverse,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.windowReverse)
@@ -72,11 +73,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.windowSetLayout]: {
-				label: CompanionLabels.windowSetLayout,
+				name: CompanionLabels.windowSetLayout,
 				options: getWindowSetLayoutOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.windowSetLayout)
@@ -85,11 +86,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.topologySet]: {
-				label: CompanionLabels.topologySet,
+				name: CompanionLabels.topologySet,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.name),
 					createOption(
@@ -117,11 +118,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.remotePlaylistOpen]: {
-				label: CompanionLabels.remotePlaylistOpen,
+				name: CompanionLabels.remotePlaylistOpen,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.playlistId),
 					this.createSpecialActionOption(),
@@ -159,11 +160,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showOpen]: {
-				label: CompanionLabels.showOpen,
+				name: CompanionLabels.showOpen,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.uri),
 					createOption(
@@ -183,11 +184,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showClose]: {
-				label: CompanionLabels.showClose,
+				name: CompanionLabels.showClose,
 				options: [
 					createOption(Types.checkbox, DRProperties.saveShow, CompanionLabels.saveShow, false, undefined, false),
 					createOption(
@@ -206,11 +207,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showCue]: {
-				label: CompanionLabels.showCue,
+				name: CompanionLabels.showCue,
 				options: getShowCueOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showCue)
@@ -219,11 +220,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTake]: {
-				label: CompanionLabels.showTake,
+				name: CompanionLabels.showTake,
 				options: getShowTakeOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showTake)
@@ -232,11 +233,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeRecue]: {
-				label: CompanionLabels.showTakeRecue,
+				name: CompanionLabels.showTakeRecue,
 				options: getShowTakeOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showTakeRecue)
@@ -245,11 +246,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showRecueOnAir]: {
-				label: CompanionLabels.showRecueOnAir,
+				name: CompanionLabels.showRecueOnAir,
 				options: getShowRecueOnAirOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showRecueOnAir)
@@ -258,11 +259,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeOut]: {
-				label: CompanionLabels.showTakeOut,
+				name: CompanionLabels.showTakeOut,
 				options: getShowTakeOutOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showTakeOut)
@@ -271,11 +272,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeOutRecue]: {
-				label: CompanionLabels.showTakeOutRecue,
+				name: CompanionLabels.showTakeOutRecue,
 				options: getShowTakeOutOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showTakeOutRecue)
@@ -284,11 +285,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showClear]: {
-				label: CompanionLabels.showClear,
+				name: CompanionLabels.showClear,
 				options: getShowClearOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showClear)
@@ -297,11 +298,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showCreatePage]: {
-				label: CompanionLabels.showCreatePage,
+				name: CompanionLabels.showCreatePage,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.name),
 					createOption(
@@ -346,11 +347,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataEvent]: {
-				label: CompanionLabels.showSetProjectDataEvent,
+				name: CompanionLabels.showSetProjectDataEvent,
 				options: [createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path)],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -359,11 +360,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataBoolean]: {
-				label: CompanionLabels.showSetProjectDataBoolean,
+				name: CompanionLabels.showSetProjectDataBoolean,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
 					createOption(Types.checkbox, DRProperties.toggle, DRProperties.toggle, false, undefined, false),
@@ -376,11 +377,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataNumber]: {
-				label: CompanionLabels.showSetProjectDataNumber,
+				name: CompanionLabels.showSetProjectDataNumber,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
 					createOption(
@@ -401,11 +402,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectData]: {
-				label: CompanionLabels.showSetProjectData,
+				name: CompanionLabels.showSetProjectData,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
 					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value),
@@ -417,11 +418,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplates]: {
-				label: CompanionLabels.showPreloadTemplates,
+				name: CompanionLabels.showPreloadTemplates,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showPreloadTemplates)
@@ -430,11 +431,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplatesPlaylist]: {
-				label: CompanionLabels.showPreloadTemplatesPlaylist,
+				name: CompanionLabels.showPreloadTemplatesPlaylist,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showPreloadTemplatesPlaylist)
@@ -443,11 +444,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplatesTimeline]: {
-				label: CompanionLabels.showPreloadTemplatesTimeline,
+				name: CompanionLabels.showPreloadTemplatesTimeline,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showPreloadTemplatesTimeline)
@@ -456,11 +457,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showReloadTemplates]: {
-				label: CompanionLabels.showReloadTemplates,
+				name: CompanionLabels.showReloadTemplates,
 				options: [
 					createOption(
 						Types.textwithvariables,
@@ -479,11 +480,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.playlistActivate]: {
-				label: CompanionLabels.playlistActivate,
+				name: CompanionLabels.playlistActivate,
 				options: getPlaylistActivateOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.playlistActivate)
@@ -492,11 +493,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.playlistRestart]: {
-				label: CompanionLabels.playlistRestart,
+				name: CompanionLabels.playlistRestart,
 				options: getPlaylistRestartOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.playlistRestart)
@@ -505,11 +506,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.macroExecute]: {
-				label: CompanionLabels.macroExecute,
+				name: CompanionLabels.macroExecute,
 				options: getMacroExecuteOptions(),
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.macroExecute)
@@ -518,11 +519,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelinePlay]: {
-				label: CompanionLabels.timelinePlay,
+				name: CompanionLabels.timelinePlay,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelinePlay)
@@ -531,11 +532,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelinePause]: {
-				label: CompanionLabels.timelinePause,
+				name: CompanionLabels.timelinePause,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelinePause)
@@ -544,11 +545,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineRewind]: {
-				label: CompanionLabels.timelineRewind,
+				name: CompanionLabels.timelineRewind,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelineRewind)
@@ -557,11 +558,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineForward]: {
-				label: CompanionLabels.timelineForward,
+				name: CompanionLabels.timelineForward,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelineForward)
@@ -570,11 +571,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineJumpStart]: {
-				label: CompanionLabels.timelineJumpStart,
+				name: CompanionLabels.timelineJumpStart,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelineJumpStart)
@@ -583,11 +584,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineJumpEnd]: {
-				label: CompanionLabels.timelineJumpEnd,
+				name: CompanionLabels.timelineJumpEnd,
 				options: [],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.timelineJumpEnd)
@@ -596,11 +597,11 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.logWrite]: {
-				label: CompanionLabels.logWrite,
+				name: CompanionLabels.logWrite,
 				options: [
 					this.createLevelOption(),
 					createOption(Types.textwithvariables, DRProperties.message),
@@ -646,7 +647,7 @@ export class ActionsProvider {
 					this.unsubscribeAction(action)
 				},
 				callback: (action, bank) => {
-					this.handleActionCallback(action, bank)
+					this.handleActionCallback(action)
 				},
 			},
 		}
@@ -681,11 +682,11 @@ export class ActionsProvider {
 		})
 	}
 
-	handleActionCallback(action: CompanionActionEvent, info: CompanionActionEventInfo) {
+	handleActionCallback(action: CompanionActionEvent) {
 		const drActionInfoFound = this.drActionInfos.find((a) => a.id === action.id) //Get drActionInfoFound to use the request id
 
 		if (this.commandsWithStatus.includes(drActionInfoFound.command))
-			this.handleAdvancedActionCallback(action, info, drActionInfoFound)
+			this.handleAdvancedActionCallback(action, drActionInfoFound)
 		else this.handleSimpleActionCallback(action, drActionInfoFound)
 	}
 
@@ -695,7 +696,6 @@ export class ActionsProvider {
 
 	private handleAdvancedActionCallback(
 		action: CompanionActionEvent,
-		info: CompanionActionEventInfo,
 		drActionInfo: DrActionInfo
 	) {
 		const canProcess = (drCompanionInfoFound: DrCompanionInfo) => {
@@ -713,58 +713,53 @@ export class ActionsProvider {
 				return true
 			}
 		}
-		//IMPORTANT!
-		//Always convert the value of the bank and page to number because it can come as a string, if you don't do it you can have duplicates in the drCompanionInfos.
-		if (isNumber(info.bank) && isNumber(info.page)) {
-			const numberBank: number = Number(info.bank)
-			const numberPage: number = Number(info.page)
-			//Finding action info, it should always be a result as we populate them on the subscribe callback
 
-			let drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
-				(d) => d.bank === numberBank && d.page === numberPage
-			)
-			if (drCompanionInfoFound) {
-				//drCompanionInfoFound checking if it has an action or not, it should help for the feedback process in the feedback callback
-				if (drCompanionInfoFound.drActionInfo) {
-					//drActionInfo exists?
-					if (drCompanionInfoFound.drActionInfo.id === action.id) {
-						//same action id?
-						console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
-						if (canProcess(drCompanionInfoFound)) {
-							drActionInfo.isRunning = true
-							if (drCompanionInfoFound.drFeedbackInfo) {
-								stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
-								this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
-							}
-							this.processAction(action, drActionInfo)
-						}
-					} else {
-						drActionInfo.isRunning = true
-						this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name
-					}
-				} else {
-					console.log(`VENTUZ: The drAction will be added`)
-					drCompanionInfoFound.drActionInfo = drActionInfo //Add it as it can help the Feedback in its callback
+		//Finding action info, it should always be a result as we populate them on the subscribe callback
+
+		let drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
+			(d) => d.controlId === action.controlId
+		)
+		if (drCompanionInfoFound) {
+			//drCompanionInfoFound checking if it has an action or not, it should help for the feedback process in the feedback callback
+			if (drCompanionInfoFound.drActionInfo) {
+				//drActionInfo exists?
+				if (drCompanionInfoFound.drActionInfo.id === action.id) {
+					//same action id?
+					console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
 					if (canProcess(drCompanionInfoFound)) {
 						drActionInfo.isRunning = true
-						stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
-						this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
+						if (drCompanionInfoFound.drFeedbackInfo) {
+							stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
+							this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
+						}
 						this.processAction(action, drActionInfo)
 					}
+				} else {
+					drActionInfo.isRunning = true
+					this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name
 				}
 			} else {
-				//Create one
-				const newDrCompanionInfo: DrCompanionInfo = {
-					page: numberPage,
-					bank: numberBank,
-					drActionInfo: drActionInfo,
-					drFeedbackInfo: undefined,
+				console.log(`VENTUZ: The drAction will be added`)
+				drCompanionInfoFound.drActionInfo = drActionInfo //Add it as it can help the Feedback in its callback
+				if (canProcess(drCompanionInfoFound)) {
+					drActionInfo.isRunning = true
+					stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
+					this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
+					this.processAction(action, drActionInfo)
 				}
-				this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
-				drActionInfo.isRunning = true
-				this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name//ProcessAction as it does not have a Feedback to listen
 			}
+		} else {
+			//Create one
+			const newDrCompanionInfo: DrCompanionInfo = {
+				controlId: action.controlId,
+				drActionInfo: drActionInfo,
+				drFeedbackInfo: undefined,
+			}
+			this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
+			drActionInfo.isRunning = true
+			this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name//ProcessAction as it does not have a Feedback to listen
 		}
+
 	}
 
 	private processAction(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
@@ -772,7 +767,7 @@ export class ActionsProvider {
 			this.drModuleInstance.wsClient.send(
 				JSON.stringify(
 					buildRequestMsg(
-						action.action,
+						action.actionId,
 						action.options,
 						drActionInfo.command,
 						drActionInfo.requestId,
