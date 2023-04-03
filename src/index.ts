@@ -34,18 +34,14 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		console.log('VENTUZ: Create Instance')
 	}
 	//Main initialization function called once the module is OK to start doing things. Principally, this is when the module should establish a connection to the device.
-	async init(config: DRModuleConfig, isFirstInit: boolean) {
+	async init(config: DRModuleConfig, _: boolean) {
+		console.log('VENTUZ: Init')
 		this.config = config;
-		if (isFirstInit) {
-			this.initActions()
-			this.initFeedbacks()
-			this.initPresets()
-		}
-		else {
-			console.log('VENTUZ: Init')
-			this.initWebSocket()
-			this.startReconnectionTimer(this.config.intervalReconnection)
-		}
+		this.initActions()
+		this.initFeedbacks()
+		this.initPresets()
+		this.initWebSocket()
+		this.startReconnectionTimer(this.config.intervalReconnection)
 	}
 
 	initActions() {
