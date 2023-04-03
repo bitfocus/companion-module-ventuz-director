@@ -1,12 +1,4 @@
 import { CompanionActionDefinitions, CompanionActionEvent, CompanionInputFieldDropdown } from '@companion-module/base'
-import DRModuleInstance = require('.')
-// import {
-// 	CompanionActionEvent,
-// 	CompanionActionEventInfo,
-// 	CompanionActions,
-// 	CompanionInputFieldDropdown,
-// 	SomeCompanionConfigField,
-// } from '../../../instance_skel_types'
 import { DrActionInfo, DrCompanionInfo } from './drCompanionInfo'
 import {
 	buildRequestMsg,
@@ -24,6 +16,7 @@ import {
 	stopStatusTimer,
 } from './helpers'
 import { DRProperties, DRCommands, ActionNames, CompanionLabels, Types } from './labels'
+import { DRModuleInstance } from '.'
 
 export class ActionsProvider {
 	private commandsWithStatus: string[] = [
@@ -59,8 +52,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async(action, bank) => {
+					await await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.windowReverse]: {
@@ -72,8 +65,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.windowSetLayout]: {
@@ -85,8 +78,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.topologySet]: {
@@ -117,8 +110,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.remotePlaylistOpen]: {
@@ -159,8 +152,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showOpen]: {
@@ -183,8 +176,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showClose]: {
@@ -206,8 +199,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showCue]: {
@@ -219,8 +212,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTake]: {
@@ -232,8 +225,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeRecue]: {
@@ -245,8 +238,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showRecueOnAir]: {
@@ -258,8 +251,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeOut]: {
@@ -271,8 +264,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showTakeOutRecue]: {
@@ -284,8 +277,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showClear]: {
@@ -297,8 +290,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showCreatePage]: {
@@ -346,8 +339,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataEvent]: {
@@ -359,8 +352,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataBoolean]: {
@@ -376,8 +369,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectDataNumber]: {
@@ -401,8 +394,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showSetProjectData]: {
@@ -417,8 +410,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplates]: {
@@ -430,8 +423,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplatesPlaylist]: {
@@ -443,8 +436,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showPreloadTemplatesTimeline]: {
@@ -456,8 +449,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.showReloadTemplates]: {
@@ -479,8 +472,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.playlistActivate]: {
@@ -492,8 +485,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.playlistRestart]: {
@@ -505,8 +498,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.macroExecute]: {
@@ -518,8 +511,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelinePlay]: {
@@ -531,8 +524,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelinePause]: {
@@ -544,8 +537,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineRewind]: {
@@ -557,8 +550,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineForward]: {
@@ -570,8 +563,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineJumpStart]: {
@@ -583,8 +576,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.timelineJumpEnd]: {
@@ -596,8 +589,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.logWrite]: {
@@ -646,8 +639,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: (action, bank) => {
-					this.handleActionCallback(action)
+				callback: async (action, bank) => {
+					await this.handleActionCallback(action)
 				},
 			},
 		}
@@ -682,19 +675,19 @@ export class ActionsProvider {
 		})
 	}
 
-	handleActionCallback(action: CompanionActionEvent) {
+	async handleActionCallback(action: CompanionActionEvent) {
 		const drActionInfoFound = this.drActionInfos.find((a) => a.id === action.id) //Get drActionInfoFound to use the request id
 
 		if (this.commandsWithStatus.includes(drActionInfoFound.command))
-			this.handleAdvancedActionCallback(action, drActionInfoFound)
-		else this.handleSimpleActionCallback(action, drActionInfoFound)
+			await this.handleAdvancedActionCallback(action, drActionInfoFound)
+		else await this.handleSimpleActionCallback(action, drActionInfoFound)
 	}
 
-	private handleSimpleActionCallback(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
-		this.processAction(action, drActionInfo)
+	private async handleSimpleActionCallback(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
+		await this.processAction(action, drActionInfo)
 	}
 
-	private handleAdvancedActionCallback(
+	private async handleAdvancedActionCallback(
 		action: CompanionActionEvent,
 		drActionInfo: DrActionInfo
 	) {
@@ -732,11 +725,11 @@ export class ActionsProvider {
 							stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
 							this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
 						}
-						this.processAction(action, drActionInfo)
+						await this.processAction(action, drActionInfo)
 					}
 				} else {
 					drActionInfo.isRunning = true
-					this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name
+					await this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name
 				}
 			} else {
 				console.log(`VENTUZ: The drAction will be added`)
@@ -745,7 +738,7 @@ export class ActionsProvider {
 					drActionInfo.isRunning = true
 					stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
 					this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
-					this.processAction(action, drActionInfo)
+					await this.processAction(action, drActionInfo)
 				}
 			}
 		} else {
@@ -757,16 +750,16 @@ export class ActionsProvider {
 			}
 			this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
 			drActionInfo.isRunning = true
-			this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name//ProcessAction as it does not have a Feedback to listen
+			await this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name//ProcessAction as it does not have a Feedback to listen
 		}
 
 	}
 
-	private processAction(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
+	private async processAction(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
 		try {
 			this.drModuleInstance.wsClient.send(
 				JSON.stringify(
-					buildRequestMsg(
+					await buildRequestMsg(
 						action.actionId,
 						action.options,
 						drActionInfo.command,
