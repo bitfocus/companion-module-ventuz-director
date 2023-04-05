@@ -704,17 +704,33 @@ export class ActionsProvider {
 				return true
 			}
 		}
-		console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
-		const canPro = canProcess(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo)
-		if (canPro) {
-			this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo.isRunning = true
-			if (this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo) {
-				stopStatusTimer(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo)
-				this.drModuleInstance.checkFeedbacksById(
-					this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo.id
-				)
+		const info = this.drModuleInstance.drCompanionInfoDict[action.controlId]// // IMPORTANT Sometimes "controlId" comes as "bank:undefined-undefined", that is why we have to check here for Truthiness: https://bitfocusio.slack.com/archives/CFG7HAN5N/p1680708750500569
+		if (info) {
+
+			console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
+			const canPro = canProcess(info.drFeedbackInfo)
+			if (canPro) {
+				info.drActionInfo.isRunning = true
+				if (info.drFeedbackInfo) {
+					stopStatusTimer(info.drFeedbackInfo)
+					this.drModuleInstance.checkFeedbacksById(info.drFeedbackInfo.id)
+					await this.processAction(action, info.drActionInfo)
+				}
 			}
-			await this.processAction(action, this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo)
+		}
+		else {
+			//All this is a workaround due to the controlId issue:
+
+			let drAction: DrActionInfo = null;
+			for (const controlId in this.drModuleInstance.drCompanionInfoDict) {
+				if (this.drModuleInstance.drCompanionInfoDict[controlId]?.drActionInfo?.id === action.id) {
+					drAction = this.drModuleInstance.drCompanionInfoDict[controlId].drActionInfo;
+					break
+				}
+			}
+			if (drAction) {
+				await this.processAction(action, drAction)
+			}
 		}
 	}
 
