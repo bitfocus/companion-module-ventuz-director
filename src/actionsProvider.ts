@@ -34,11 +34,9 @@ export class ActionsProvider {
 	] //An advanced callback will be applied to this commands.
 
 	private drModuleInstance: DRModuleInstance
-	drActionInfos: DrActionInfo[]
 
 	constructor(drModuleInstance: DRModuleInstance) {
 		this.drModuleInstance = drModuleInstance
-		this.drActionInfos = []
 	}
 
 	getActions(): CompanionActionDefinitions {
@@ -52,7 +50,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async(action, bank) => {
+				callback: async (action, bank) => {
 					await await this.handleActionCallback(action)
 				},
 			},
@@ -647,18 +645,12 @@ export class ActionsProvider {
 	}
 
 	private unsubscribeAction(action: CompanionActionEvent) {
-		const index = this.drActionInfos.findIndex((a) => a.id === action.id)
-		if (index !== -1) {
-			//Delete from action infos array:
-			this.drActionInfos.splice(index, 1)
-			
-			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[action.controlId]
-			//Assign undefined in the drCompanionInfo
-			drCompanionInfo.drActionInfo = undefined;
+		const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[action.controlId]
+		//Assign undefined in the drCompanionInfo
+		drCompanionInfo.drActionInfo = undefined;
 
-			if (drCompanionInfo.drFeedbackInfo === undefined)
-					delete this.drModuleInstance.drCompanionInfoDict[action.controlId]
-		}
+		if (drCompanionInfo.drFeedbackInfo === undefined)
+			delete this.drModuleInstance.drCompanionInfoDict[action.controlId]
 	}
 
 	private subscribeAction(action: CompanionActionEvent, command: string) {
@@ -669,7 +661,6 @@ export class ActionsProvider {
 			isRunning: false,
 			requestId: this.drModuleInstance.getRequestId(),
 		}
-		this.drActionInfos.push(newDrAction)
 
 
 		if (this.drModuleInstance.drCompanionInfoDict[action.controlId])
@@ -680,11 +671,20 @@ export class ActionsProvider {
 
 	async handleActionCallback(action: CompanionActionEvent) {
 
-		const drActionInfoFound = this.drActionInfos.find((a) => a.id === action.id) //Get drActionInfoFound to use the request id
+		let controlIdFound: string = undefined;
+		for (const controlId in this.drModuleInstance.drCompanionInfoDict) {
+			if (this.drModuleInstance.drCompanionInfoDict[controlId].drActionInfo?.id === action.id) {
+				controlIdFound = controlId;
+				break;
+			}
+		}
+		const drActionInfoFound = this.drModuleInstance.drCompanionInfoDict[controlIdFound]?.drActionInfo;
+		if (drActionInfoFound) {
+			if (this.commandsWithStatus.includes(drActionInfoFound.command))
+				await this.handleAdvancedActionCallback(action, drActionInfoFound)
+			else await this.handleSimpleActionCallback(action, drActionInfoFound)
+		}
 
-		if (this.commandsWithStatus.includes(drActionInfoFound.command))
-			await this.handleAdvancedActionCallback(action, drActionInfoFound)
-		else await this.handleSimpleActionCallback(action, drActionInfoFound)
 	}
 
 	private async handleSimpleActionCallback(action: CompanionActionEvent, drActionInfo: DrActionInfo) {
@@ -714,7 +714,7 @@ export class ActionsProvider {
 
 		//Finding action info, it should always be a result as we populate them on the subscribe callback		
 		//drCompanionInfoFound checking if it has an action or not, it should help for the feedback process in the feedback callback
-			//drActionInfo exists?
+		//drActionInfo exists?
 		console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
 		const canPro = canProcess(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo)
 		if (canPro) {
@@ -726,7 +726,7 @@ export class ActionsProvider {
 			}
 			await this.processAction(action, this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo)
 		}
-		
+
 		// else {
 		// 	console.log(`VENTUZ: The drAction will be added`)
 		// 	drCompanionInfoFound.drActionInfo = drActionInfo //Add it as it can help the Feedback in its callback

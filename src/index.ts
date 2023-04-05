@@ -47,7 +47,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		// 	for (const prop in this.actionsProvider.drActionInfos) {
 		// 		this.log("debug", `${prop}`);
 		// 	}
-			
+
 
 		// }, 5000);
 	}
@@ -111,51 +111,59 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 			}
 
 
-			const drFeedbackInfoFound = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.requestId === +(json.RequestID as string))
+			this.processMessageForFeedback(json)
 
-			if (drFeedbackInfoFound) {
-				drFeedbackInfoFound.responseCode = json.Code as number;
-				const index = this.feedbacksProvider.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
-				if (index !== -1) {
-					this.checkFeedbacksById(drFeedbackInfoFound.id)
-				}
+			this.processMessageForAction(json)
+		}
+	}
+	
+	private processMessageForAction(json: any) {
+		let controlIdFound: string = undefined
+		for (const controlId in this.drCompanionInfoDict) {
+			if (this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID && this.drCompanionInfoDict[controlId].drActionInfo?.isRunning) {
+				controlIdFound = controlId
+				break
 			}
+		}
 
-			let controlIdFound: string = undefined;
-			for (const controlId in this.drCompanionInfoDict) {
-				if (this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID && this.drCompanionInfoDict[controlId].drActionInfo?.isRunning) {
-					controlIdFound = controlId;
-					break;
-				}
-			}
-
-			if (controlIdFound) {
-				const drCompanionInfo = this.drCompanionInfoDict[controlIdFound];
-				drCompanionInfo.drActionInfo.isRunning = false
-				if (drCompanionInfo.drFeedbackInfo) {
-					//If it already has a feedback created then restart the timer
-					const ff = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
-					if (ff) {
-						drCompanionInfo.drFeedbackInfo.statusTimer = startStatusTimer(
-							this,
-							drCompanionInfo.drFeedbackInfo.feedbackId,
-							drCompanionInfo.drFeedbackInfo.options,
-							drCompanionInfo.drFeedbackInfo.statusCommand,
-							drCompanionInfo.drFeedbackInfo.requestId
-						)
-					}
-				}
+		if (controlIdFound) {
+			const drCompanionInfo = this.drCompanionInfoDict[controlIdFound]
+			drCompanionInfo.drActionInfo.isRunning = false
+			if (drCompanionInfo.drFeedbackInfo) {
+				//If it already has a feedback created then restart the timer
+				drCompanionInfo.drFeedbackInfo.statusTimer = startStatusTimer(
+					this,
+					drCompanionInfo.drFeedbackInfo.feedbackId,
+					drCompanionInfo.drFeedbackInfo.options,
+					drCompanionInfo.drFeedbackInfo.statusCommand,
+					drCompanionInfo.drFeedbackInfo.requestId
+				)
 			}
 		}
 	}
+
+	private processMessageForFeedback(json: any) {
+		let controlIdFound: string = undefined
+		for (const controlId in this.drCompanionInfoDict) {
+			if (this.drCompanionInfoDict[controlId].drFeedbackInfo?.requestId === +(json.RequestID as string)) {
+				controlIdFound = controlId
+				break
+			}
+		}
+
+		if (this.drCompanionInfoDict[controlIdFound]?.drFeedbackInfo) {
+			this.drCompanionInfoDict[controlIdFound].drFeedbackInfo.responseCode = json.Code as number
+			this.checkFeedbacksById(this.drCompanionInfoDict[controlIdFound].drFeedbackInfo.id)
+		}
+	}
+
 	//Clean up the instance before it is destroyed. This is called both on shutdown and when an instance is disabled or deleted. Destroy any timers and socket connections here.
 	async destroy() {
 		console.log('VENTUZ: Destroy')
 		//Stop all remaining timers if any
 		for (const timer of this.timers) {
-			this.log("debug", "timer")
 			clearInterval(timer);
-		  }
+		}
 
 		this.stopReconectionTimer()
 		this.closeWebSocket()

@@ -21,10 +21,8 @@ import { DRModuleInstance } from '.'
 
 export class FeedbacksProvider {
 	private drModuleInstance: DRModuleInstance
-	drFeedbackInfos: DrFeedbackInfo[]
 	constructor(drModuleInstance: DRModuleInstance) {
 		this.drModuleInstance = drModuleInstance
-		this.drFeedbackInfos = []
 	}
 	getFeedbacks(): CompanionFeedbackDefinitions {
 		return {
@@ -259,20 +257,18 @@ export class FeedbacksProvider {
 	}
 
 	private unsubscribeFeedback(feedback: CompanionFeedbackInfo) {
-		const feedbackIndex = this.drFeedbackInfos.findIndex((fd) => fd.id === feedback.id)
-		if (feedbackIndex != -1) {
-			const drFeedbackInfoFound = this.drFeedbackInfos[feedbackIndex]
+		const drFeedbackInfoFound = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drFeedbackInfo;
+		if (drFeedbackInfoFound) {
+			
 			this.drModuleInstance.log('debug', `from unsubscribe  ${drFeedbackInfoFound.requestId.toString()}`)
 			stopStatusTimer(drFeedbackInfoFound) //Just clearing the interval
-			//Delete from feedbacks infos array:
-			this.drFeedbackInfos.splice(feedbackIndex, 1)
-
+			
 			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
 			//Assign undefined in the drCompanionInfoFound
 			drCompanionInfo.drFeedbackInfo = undefined;
-
+			
 			if (drCompanionInfo.drActionInfo === undefined)
-				delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
+			delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
 		}
 	}
 
@@ -288,7 +284,6 @@ export class FeedbacksProvider {
 			responseCode: -1
 		}
 
-		this.drFeedbackInfos.push(newDrFeedbackInfo)
 
 		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId])
 			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo = newDrFeedbackInfo;
