@@ -21,6 +21,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	feedbacksProvider: FeedbacksProvider
 	presetsProvider: PresetsProvider
 	reconectionTimer: NodeJS.Timer
+	timers: NodeJS.Timer[]
 	//Constrtuctor
 	//See https://github.com/bitfocus/companion/wiki/instance_skel
 	constructor(internal: unknown) {
@@ -31,6 +32,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		this.feedbacksProvider = new FeedbacksProvider(this)
 		this.presetsProvider = new PresetsProvider(this)
 		this.config = {};
+		this.timers = [];
 		// console.log('VENTUZ: Create Instance')
 		// setInterval(() => {
 		// 	this.log("debug", `COmpanionInfos ==============================================`);
@@ -130,7 +132,6 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 			if (controlIdFound) {
 				const drCompanionInfo = this.drCompanionInfoDict[controlIdFound];
 				drCompanionInfo.drActionInfo.isRunning = false
-				console.log("Hi, false here")
 				if (drCompanionInfo.drFeedbackInfo) {
 					//If it already has a feedback created then restart the timer
 					const ff = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
@@ -150,6 +151,12 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	//Clean up the instance before it is destroyed. This is called both on shutdown and when an instance is disabled or deleted. Destroy any timers and socket connections here.
 	async destroy() {
 		console.log('VENTUZ: Destroy')
+		//Stop all remaining timers if any
+		for (const timer of this.timers) {
+			this.log("debug", "timer")
+			clearInterval(timer);
+		  }
+
 		this.stopReconectionTimer()
 		this.closeWebSocket()
 	}

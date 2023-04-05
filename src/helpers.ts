@@ -205,6 +205,7 @@ export function startStatusTimer(
 		}
 	}, drModuleInstance.config.intervalStatus * 1000)
 
+	drModuleInstance.timers.push(sendTimer);
 	return sendTimer
 }
 
