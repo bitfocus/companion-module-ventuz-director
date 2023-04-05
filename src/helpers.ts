@@ -3,9 +3,8 @@ import { DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.';
 
-type SomeCompanionInputField = SomeCompanionActionInputField | SomeCompanionFeedbackInputField;
 
-export function createOption(type, id, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): SomeCompanionInputField {
+export function createOption(type, id, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): any {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
 	if (type === Types.textwithvariables) {
@@ -31,7 +30,7 @@ export function createOption(type, id, label = undefined, defaultValue = undefin
 	}
 }
 
-export function getShowTakeOptions(): SomeCompanionInputField[] {
+export function getShowTakeOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -45,7 +44,7 @@ export function getShowTakeOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowRecueOnAirOptions(): SomeCompanionInputField[] {
+export function getShowRecueOnAirOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -59,7 +58,7 @@ export function getShowRecueOnAirOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowClearOptions(): SomeCompanionInputField[] {
+export function getShowClearOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -73,7 +72,7 @@ export function getShowClearOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowTakeOutOptions(): SomeCompanionInputField[] {
+export function getShowTakeOutOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -87,7 +86,7 @@ export function getShowTakeOutOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowCueOptions(): SomeCompanionInputField[] {
+export function getShowCueOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData),
 		createOrOption(),
@@ -125,7 +124,7 @@ export function getShowCueOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getPlaylistRestartOptions(): SomeCompanionInputField[] {
+export function getPlaylistRestartOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -139,7 +138,7 @@ export function getPlaylistRestartOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getPlaylistActivateOptions(): SomeCompanionInputField[] {
+export function getPlaylistActivateOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.index),
 		createOrOption(),
@@ -169,7 +168,7 @@ export function getPlaylistActivateOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getMacroExecuteOptions(): SomeCompanionInputField[] {
+export function getMacroExecuteOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.id),
 		createOrOption(),
@@ -177,7 +176,7 @@ export function getMacroExecuteOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getWindowSetLayoutOptions(): SomeCompanionInputField[] {
+export function getWindowSetLayoutOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.index),
 		createOrOption(),
@@ -185,7 +184,7 @@ export function getWindowSetLayoutOptions(): SomeCompanionInputField[] {
 	]
 }
 
-function createOrOption(): SomeCompanionInputField {
+function createOrOption(): any {
 	return createOption(Types.staticText, CompanionLabels.or)
 }
 

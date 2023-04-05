@@ -2,6 +2,7 @@ import { CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, comb
 // import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.'
+import { getMacroExecuteOptions, getPlaylistActivateOptions, getPlaylistRestartOptions, getShowClearOptions, getShowCueOptions, getShowRecueOnAirOptions, getShowTakeOptions, getShowTakeOutOptions, getWindowSetLayoutOptions } from './helpers'
 
 export class PresetsProvider {
 	private drModuleInstance: DRModuleInstance
@@ -22,7 +23,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showTake,
-								options: this.getFakeOption(),
+								options: getShowTakeOptions()[0],
 							}
 						],
 						up: []
@@ -31,7 +32,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanTake,
-						options: this.getFakeOption(),
+						options: getShowTakeOptions()[0],
 					},
 				],
 			},
@@ -45,7 +46,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showTakeRecue,
-								options: this.getFakeOption(),
+								options: getShowTakeOptions()[0],
 							}
 						],
 						up: []
@@ -54,7 +55,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanTakeRecue,
-						options: this.getFakeOption(),
+						options: getShowTakeOptions()[0],
 					},
 				],
 			},
@@ -68,7 +69,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showCue,
-								options: this.getFakeOption(),
+								options: getShowCueOptions()[0],
 							}
 						],
 						up: []
@@ -77,7 +78,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanCue,
-						options: this.getFakeOption(),
+						options: getShowCueOptions()[0],
 					},
 				],
 			},
@@ -91,7 +92,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showRecueOnAir,
-								options: this.getFakeOption(),
+								options: getShowRecueOnAirOptions()[0],
 							}
 						],
 						up: []
@@ -100,7 +101,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanRecueOnAir,
-						options: this.getFakeOption(),
+						options: getShowRecueOnAirOptions()[0],
 					},
 				],
 			},
@@ -114,7 +115,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showClear,
-								options: this.getFakeOption(),
+								options: getShowClearOptions()[0],
 							}
 						],
 						up: []
@@ -123,7 +124,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanClear,
-						options: this.getFakeOption(),
+						options: getShowClearOptions()[0],
 					},
 				],
 			},
@@ -137,7 +138,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showTakeOut,
-								options: this.getFakeOption(),
+								options: getShowTakeOutOptions()[0],
 							}
 						],
 						up: []
@@ -146,7 +147,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanTakeOut,
-						options: this.getFakeOption(),
+						options: getShowTakeOutOptions()[0],
 					},
 				],
 			},
@@ -160,7 +161,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.showTakeOutRecue,
-								options: this.getFakeOption(),
+								options: getShowTakeOutOptions()[0],
 							}
 						],
 						up: []
@@ -169,7 +170,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.showCanTakeOutRecue,
-						options: this.getFakeOption(),
+						options: getShowTakeOutOptions()[0],
 					},
 				],
 			},
@@ -183,7 +184,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.playlistRestart,
-								options: this.getFakeOption(),
+								options: getPlaylistRestartOptions()[0],
 							}
 						],
 						up: []
@@ -192,7 +193,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.playlistCanRestart,
-						options: this.getFakeOption(),
+						options: getPlaylistRestartOptions()[0],
 					},
 				],
 			},
@@ -206,7 +207,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.playlistActivate,
-								options: this.getFakeOption(),
+								options: getPlaylistActivateOptions()[0],
 							}
 						],
 						up: []
@@ -215,7 +216,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.playlistCanActivate,
-						options: this.getFakeOption(),
+						options: getPlaylistActivateOptions()[0],
 					},
 				],
 			},
@@ -229,7 +230,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.macroExecute,
-								options: this.getFakeOption(),
+								options: getMacroExecuteOptions()[0],
 							}
 						],
 						up: []
@@ -238,7 +239,7 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.macroCanExecute,
-						options: this.getFakeOption(),
+						options: getMacroExecuteOptions()[0],
 					},
 				],
 			},
@@ -252,7 +253,7 @@ export class PresetsProvider {
 						down: [
 							{
 								actionId: ActionNames.windowSetLayout,
-								options: this.getFakeOption(),
+								options: getWindowSetLayoutOptions()[0],
 							}
 						],
 						up: []
@@ -261,18 +262,18 @@ export class PresetsProvider {
 				feedbacks: [
 					{
 						feedbackId: FeedbackTypes.windowCanSetLayout,
-						options: this.getFakeOption(),
+						options: getWindowSetLayoutOptions()[0],
 					},
 				],
 			},
 		}
 	}
 	// This fake option is a hack because it is mandatory to provide a value in the options array.
-	getFakeOption(): { [key: string]: InputValue } {
-		return {
-			_: '',
-		}
-	}
+	// getFakeOption(): { [key: string]: InputValue } {
+	// 	return {
+	// 		_: '',
+	// 	}
+	// }
 
 	getBankOptions(text: string): CompanionButtonStyleProps {
 		return {
