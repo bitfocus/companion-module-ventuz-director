@@ -1,5 +1,5 @@
 import { CompanionActionDefinitions, CompanionActionEvent, CompanionInputFieldDropdown } from '@companion-module/base'
-import { DrActionInfo, DrCompanionInfo } from './drCompanionInfo'
+import { DrActionInfo, DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import {
 	buildRequestMsg,
 	createOption,
@@ -651,31 +651,35 @@ export class ActionsProvider {
 		if (index !== -1) {
 			//Delete from action infos array:
 			this.drActionInfos.splice(index, 1)
-			//Assign undefined in the drCompanionInfoFound
-			const drCompanionInfoIndex = this.drModuleInstance.drCompanionInfos.findIndex(
-				(dc) => dc.drActionInfo && dc.drActionInfo.id === action.id
-			)
+			
+			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[action.controlId]
+			//Assign undefined in the drCompanionInfo
+			drCompanionInfo.drActionInfo = undefined;
 
-			if (drCompanionInfoIndex !== -1) {
-				const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos[drCompanionInfoIndex]
-				drCompanionInfoFound.drActionInfo = undefined
-				//Delete drCompanionInfo if drFeedbackInfo is undefined too
-				if (drCompanionInfoFound.drFeedbackInfo === undefined)
-					this.drModuleInstance.drCompanionInfos.splice(drCompanionInfoIndex, 1)
-			}
+			if (drCompanionInfo.drFeedbackInfo === undefined)
+					delete this.drModuleInstance.drCompanionInfoDict[action.controlId]
 		}
 	}
 
 	private subscribeAction(action: CompanionActionEvent, command: string) {
-		this.drActionInfos.push({
+		//Creating new drAction
+		const newDrAction = {
 			id: action.id,
 			command: command,
 			isRunning: false,
 			requestId: this.drModuleInstance.getRequestId(),
-		})
+		}
+		this.drActionInfos.push(newDrAction)
+
+
+		if (this.drModuleInstance.drCompanionInfoDict[action.controlId])
+			this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo = newDrAction;
+		else
+			this.drModuleInstance.drCompanionInfoDict[action.controlId] = { drFeedbackInfo: undefined, drActionInfo: newDrAction }
 	}
 
 	async handleActionCallback(action: CompanionActionEvent) {
+
 		const drActionInfoFound = this.drActionInfos.find((a) => a.id === action.id) //Get drActionInfoFound to use the request id
 
 		if (this.commandsWithStatus.includes(drActionInfoFound.command))
@@ -691,10 +695,10 @@ export class ActionsProvider {
 		action: CompanionActionEvent,
 		drActionInfo: DrActionInfo
 	) {
-		const canProcess = (drCompanionInfoFound: DrCompanionInfo) => {
-			if (drCompanionInfoFound.drFeedbackInfo) {
+		const canProcess = (drFeedbackInfo: DrFeedbackInfo) => {
+			if (drFeedbackInfo) {
 				//drFeedbackInfo exists?
-				if (drCompanionInfoFound.drFeedbackInfo.can) {
+				if (drFeedbackInfo.can) {
 					console.log(`VENTUZ: The action with id ${action.id} can be performed as the feedback is false`)
 					return true
 				} else {
@@ -706,52 +710,33 @@ export class ActionsProvider {
 				return true
 			}
 		}
+		// const info = this.drModuleInstance.drCompanionInfoDict[action.controlId];
 
-		//Finding action info, it should always be a result as we populate them on the subscribe callback
-
-		let drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
-			(d) => d.controlId === action.controlId
-		)
-		if (drCompanionInfoFound) {
-			//drCompanionInfoFound checking if it has an action or not, it should help for the feedback process in the feedback callback
-			if (drCompanionInfoFound.drActionInfo) {
-				//drActionInfo exists?
-				if (drCompanionInfoFound.drActionInfo.id === action.id) {
-					//same action id?
-					console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
-					if (canProcess(drCompanionInfoFound)) {
-						drActionInfo.isRunning = true
-						if (drCompanionInfoFound.drFeedbackInfo) {
-							stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
-							this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
-						}
-						await this.processAction(action, drActionInfo)
-					}
-				} else {
-					drActionInfo.isRunning = true
-					await this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name
-				}
-			} else {
-				console.log(`VENTUZ: The drAction will be added`)
-				drCompanionInfoFound.drActionInfo = drActionInfo //Add it as it can help the Feedback in its callback
-				if (canProcess(drCompanionInfoFound)) {
-					drActionInfo.isRunning = true
-					stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
-					this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
-					await this.processAction(action, drActionInfo)
-				}
+		//Finding action info, it should always be a result as we populate them on the subscribe callback		
+		//drCompanionInfoFound checking if it has an action or not, it should help for the feedback process in the feedback callback
+			//drActionInfo exists?
+		console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
+		const canPro = canProcess(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo)
+		if (canPro) {
+			this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo.isRunning = true
+			if (this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo) {
+				this.drModuleInstance.log('debug', `from action  ${this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo.requestId.toString()}`)
+				stopStatusTimer(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo)
+				this.drModuleInstance.checkFeedbacksById(this.drModuleInstance.drCompanionInfoDict[action.controlId].drFeedbackInfo.id)
 			}
-		} else {
-			//Create one
-			const newDrCompanionInfo: DrCompanionInfo = {
-				controlId: action.controlId,
-				drActionInfo: drActionInfo,
-				drFeedbackInfo: undefined,
-			}
-			this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
-			drActionInfo.isRunning = true
-			await this.processAction(action, drActionInfo) //When using standard callback the command is included in the action name//ProcessAction as it does not have a Feedback to listen
+			await this.processAction(action, this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo)
 		}
+		
+		// else {
+		// 	console.log(`VENTUZ: The drAction will be added`)
+		// 	drCompanionInfoFound.drActionInfo = drActionInfo //Add it as it can help the Feedback in its callback
+		// 	if (canProcess(drCompanionInfoFound)) {
+		// 		drActionInfo.isRunning = true
+		// 		stopStatusTimer(drCompanionInfoFound.drFeedbackInfo)
+		// 		this.drModuleInstance.checkFeedbacksById(drCompanionInfoFound.drFeedbackInfo.id)
+		// 		await this.processAction(action, drActionInfo)
+		// 	}
+		// }
 
 	}
 

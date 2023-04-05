@@ -262,26 +262,22 @@ export class FeedbacksProvider {
 		const feedbackIndex = this.drFeedbackInfos.findIndex((fd) => fd.id === feedback.id)
 		if (feedbackIndex != -1) {
 			const drFeedbackInfoFound = this.drFeedbackInfos[feedbackIndex]
+			this.drModuleInstance.log('debug', `from unsubscribe  ${drFeedbackInfoFound.requestId.toString()}`)
 			stopStatusTimer(drFeedbackInfoFound) //Just clearing the interval
 			//Delete from feedbacks infos array:
 			this.drFeedbackInfos.splice(feedbackIndex, 1)
 
-			const drCompanionInfoIndex = this.drModuleInstance.drCompanionInfos.findIndex(
-				(dc) => dc.drFeedbackInfo && dc.drFeedbackInfo.id === feedback.id
-			)
-			if (drCompanionInfoIndex !== -1) {
-				const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos[drCompanionInfoIndex]
-				drCompanionInfoFound.drFeedbackInfo = undefined
-				//Delete drCompanionInfo if drActionInfo is undefined too
-				if (drCompanionInfoFound.drActionInfo === undefined)
-					this.drModuleInstance.drCompanionInfos.splice(drCompanionInfoIndex, 1)
-			}
+			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
+			//Assign undefined in the drCompanionInfoFound
+			drCompanionInfo.drFeedbackInfo = undefined;
+
+			if (drCompanionInfo.drActionInfo === undefined)
+				delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
 		}
 	}
 
 	private subscribeFeedback(feedback: CompanionFeedbackInfo, statusCommand: string, requestId: number) {
-		this.drFeedbackInfos.push({
-			//Always creating new drFeedbackInfo
+		const newDrFeedbackInfo = {
 			id: feedback.id,
 			feedbackId: feedback.feedbackId,
 			options: feedback.options,
@@ -289,78 +285,46 @@ export class FeedbacksProvider {
 			requestId: requestId,
 			can: false,
 			statusCommand: statusCommand,
-			responseCode: -1 //By default -1, Director Remoting accepts range from 0 - 5
-		})
+			responseCode: -1
+		}
+
+		this.drFeedbackInfos.push(newDrFeedbackInfo)
+
+		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId])
+			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo = newDrFeedbackInfo;
+		else
+			this.drModuleInstance.drCompanionInfoDict[feedback.controlId] = { drFeedbackInfo: newDrFeedbackInfo, drActionInfo: undefined }
+
 	}
 
 	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {
-		let can: boolean
-		const processFeedback = (drCompanionInfo: DrCompanionInfo) => {
-			//debugger;
-			if (drCompanionInfo?.drActionInfo?.isRunning) {
-				can = false
-				return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
+		// console.log(feedback.options, "feedback.options");
+
+
+		// const info = this.drModuleInstance.drCompanionInfoDict[feedback.controlId];
+		// console.log(this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drActionInfo?.isRunning, "isRunning");
+		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drActionInfo?.isRunning) {
+			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
+			return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
+		} else {
+			if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo?.responseCode === 0) {
+				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = true;
+				return {} //No style (aka all ok, and command is not running)
+				//If action has not been created
+				// if (drCompanionInfo.drActionInfo && !drCompanionInfo.drActionInfo.isRunning) {//If there is an action and is not running then true
+				// 	console.log('Feedback true here!') //disabled style
+				// 	return true
+				// }
+				// return false;
 			} else {
-				const drFeedbackInfoFound = drCompanionInfo?.drFeedbackInfo
-				if (drFeedbackInfoFound) {	
-					if (drFeedbackInfoFound.responseCode === 0) {
-						can = true
-						//If action has not been created
-						return {} //No style (aka all ok, and command is not running)
-						// if (drCompanionInfo.drActionInfo && !drCompanionInfo.drActionInfo.isRunning) {//If there is an action and is not running then true
-						// 	console.log('Feedback true here!') //disabled style
-						// 	return true
-						// }
-						// return false;
-					} else {
-						// cannot be performed because status code is not "0"
-						//const index = this.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
-						// if (index !== -1) {
-						// 	this.drFeedbackInfos[index].responseCode = -1;
-						// }
-						can = false
-						return { bgcolor: combineRgb(255, 0, 0) } //Red color (aka "cannot perform")
-					}
-				}
-
+				// cannot be performed because status code is not "0"
+				//const index = this.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
+				// if (index !== -1) {
+				// 	this.drFeedbackInfos[index].responseCode = -1;
+				// }
+				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
+				return { bgcolor: combineRgb(255, 0, 0) } //Red color (aka "cannot perform")
 			}
-		}
-		//This callback will be called whenever companion wants to check if this feedback is 'active' and should affect the button style
-		//Creating a feedback Info always
-		const drFeedbackInfoFound = this.drFeedbackInfos.find((f) => f.id === feedback.id)
-		if (drFeedbackInfoFound) {
-			//When dropping Presets, callback is called before subscription, thats why here we check for drFeedbackInfo to be truthy so that we don't add drCompanionInfo with both drActionInfo and drFeedbackInfo as undefined.
-
-			const drCompanionInfoFound = this.drModuleInstance.drCompanionInfos.find(
-				(d) => d.controlId === feedback.controlId
-			)
-			if (drCompanionInfoFound) {
-				//Only add
-				if (!drCompanionInfoFound.drFeedbackInfo) {
-					drCompanionInfoFound.drFeedbackInfo = drFeedbackInfoFound
-				} else {
-
-					//console.log(`VENTUZ: The following drFeedbackInfo already exists  in drCompanionInfo:`, drCompanionInfoFound) //Printing the entire object so that we can catch errors better - COMMENTED TO AVOID EXTRA TRAFFIC
-				}
-				const styledObj = processFeedback(drCompanionInfoFound)
-				drCompanionInfoFound.drFeedbackInfo.can = can
-				return styledObj
-			} else {
-				//Create one
-				console.log("Create")
-
-				const newDrCompanionInfo: DrCompanionInfo = {
-					controlId: feedback.controlId,
-					drActionInfo: undefined,
-					drFeedbackInfo: drFeedbackInfoFound,
-				}
-				this.drModuleInstance.drCompanionInfos.push(newDrCompanionInfo)
-                // console.log(newDrCompanionInfo)
-				const styledObj = processFeedback(drCompanionInfoFound)
-				// drCompanionInfoFound.drFeedbackInfo.can = can
-				return styledObj
-			}
-			
 		}
 	}
 }

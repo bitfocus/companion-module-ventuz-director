@@ -16,7 +16,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	config: DRModuleConfig
 	requestIdCounter: number
 	wsClient: WebSocket
-	drCompanionInfos: DrCompanionInfo[]
+	drCompanionInfoDict: DrCompanionInfo
 	actionsProvider: ActionsProvider
 	feedbacksProvider: FeedbacksProvider
 	presetsProvider: PresetsProvider
@@ -25,13 +25,29 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	//See https://github.com/bitfocus/companion/wiki/instance_skel
 	constructor(internal: unknown) {
 		super(internal)
-		this.drCompanionInfos = []
+		this.drCompanionInfoDict = {}
 		this.requestIdCounter = 0
 		this.actionsProvider = new ActionsProvider(this)
 		this.feedbacksProvider = new FeedbacksProvider(this)
 		this.presetsProvider = new PresetsProvider(this)
 		this.config = {};
-		console.log('VENTUZ: Create Instance')
+		// console.log('VENTUZ: Create Instance')
+		// setInterval(() => {
+		// 	this.log("debug", `COmpanionInfos ==============================================`);
+		// 	for (const prop in this.drCompanionInfoDict) {
+		// 		this.log("debug", `${prop}: actionId -> ${this.drCompanionInfoDict[prop].drActionInfo.requestId} feedbackId -> ${this.drCompanionInfoDict[prop].drFeedbackInfo.requestId}`);
+		// 	}
+		// 	this.log("debug", `drFeedbacks ==============================================`);
+		// 	for (const prop in this.feedbacksProvider.drFeedbackInfos) {
+		// 		this.log("debug", `${prop}`);
+		// 	}
+		// 	this.log("debug", `drActions ==============================================`);
+		// 	for (const prop in this.actionsProvider.drActionInfos) {
+		// 		this.log("debug", `${prop}`);
+		// 	}
+			
+
+		// }, 5000);
 	}
 	//Main initialization function called once the module is OK to start doing things. Principally, this is when the module should establish a connection to the device.
 	async init(config: DRModuleConfig, _: boolean) {
@@ -42,6 +58,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		this.initPresets()
 		this.initWebSocket()
 		this.startReconnectionTimer(this.config.intervalReconnection)
+
 	}
 
 	initActions() {
@@ -91,9 +108,9 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 				this.updateStatus(InstanceStatus.Ok)
 			}
 
-			
-			const drFeedbackInfoFound =  this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.requestId === +(json.RequestID as string))
-			
+
+			const drFeedbackInfoFound = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.requestId === +(json.RequestID as string))
+
 			if (drFeedbackInfoFound) {
 				drFeedbackInfoFound.responseCode = json.Code as number;
 				const index = this.feedbacksProvider.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
@@ -102,12 +119,18 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 				}
 			}
 
-			//Check if drCompanionInfos Has this RequestId
-			const drCompanionInfo = this.drCompanionInfos.find(
-				(dc) => dc.drActionInfo && dc.drActionInfo.requestId === json.RequestID && dc.drActionInfo.isRunning
-			)
-			if (drCompanionInfo) {
+			let controlIdFound: string = undefined;
+			for (const controlId in this.drCompanionInfoDict) {
+				if (this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID && this.drCompanionInfoDict[controlId].drActionInfo?.isRunning) {
+					controlIdFound = controlId;
+					break;
+				}
+			}
+
+			if (controlIdFound) {
+				const drCompanionInfo = this.drCompanionInfoDict[controlIdFound];
 				drCompanionInfo.drActionInfo.isRunning = false
+				console.log("Hi, false here")
 				if (drCompanionInfo.drFeedbackInfo) {
 					//If it already has a feedback created then restart the timer
 					const ff = this.feedbacksProvider.drFeedbackInfos.find((fd) => fd.id === drCompanionInfo.drFeedbackInfo.id)
@@ -147,7 +170,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	//When the instance configuration is saved by the user, this update will fire with the new configuration passed. The configuration should be saved to the module, as shown below. This is also a good time to check for any important changes, such as the device IP, which require runtime changes or updates based on the new configuration. An example of resetting a TCP connection is shown in the full sample below.
 
 	async configUpdated(config: DRModuleConfig) {
-		
+
 		if (this.config.intervalReconnection != config.intervalReconnection) {
 			//Resets timer if the interval reconnection changed
 			this.stopReconectionTimer()

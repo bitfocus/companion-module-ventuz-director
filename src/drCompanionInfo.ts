@@ -18,8 +18,5 @@ export interface DrFeedbackInfo {
 	options: CompanionOptionValues
 }
 
-export interface DrCompanionInfo {
-	controlId: string,
-	drFeedbackInfo: DrFeedbackInfo
-	drActionInfo: DrActionInfo
-}
+
+export type DrCompanionInfo = { [controlId: string]: { drFeedbackInfo: DrFeedbackInfo, drActionInfo: DrActionInfo } };
