@@ -1,10 +1,9 @@
-import { CompanionFeedbackInfo, CompanionOptionValues, InputValue, SomeCompanionActionInputField, SomeCompanionFeedbackInputField } from '@companion-module/base'
+import { CompanionOptionValues, InputValue } from '@companion-module/base'
 import { DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.';
 
-
-export function createOption(type, id, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): any {
+export function createOption(type: string, id: string, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): any {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
 	if (type === Types.textwithvariables) {

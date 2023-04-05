@@ -1,6 +1,9 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackInfo, SomeCompanionFeedbackInputField, combineRgb } from '@companion-module/base'
-// import { CompanionFeedbackEvent, CompanionFeedbackEventInfo, CompanionFeedbacks } from '../../../instance_skel_types'
-import { DrCompanionInfo, DrFeedbackInfo } from './drCompanionInfo'
+import {
+	CompanionFeedbackDefinitions,
+	CompanionFeedbackInfo,
+	SomeCompanionFeedbackInputField,
+	combineRgb,
+} from '@companion-module/base'
 import {
 	createOption,
 	getMacroExecuteOptions,
@@ -12,7 +15,6 @@ import {
 	getShowTakeOptions,
 	getShowTakeOutOptions,
 	getWindowSetLayoutOptions,
-	isNumber,
 	startStatusTimer,
 	stopStatusTimer,
 } from './helpers'
@@ -26,42 +28,6 @@ export class FeedbacksProvider {
 	}
 	getFeedbacks(): CompanionFeedbackDefinitions {
 		return {
-			// CheckStatusResponse: {
-			//     type: 'boolean',
-			//     label: 'Check status response feedback',
-			//     description: 'Longer description of the feedback',
-			//     style: {
-			//         // The default style change for a boolean feedback
-			//         // The user will be able to customise these values as well as the fields that will be changed
-			//         bgcolor: this.drModuleInstance.rgb(138, 143, 138),
-			//     },
-			//     // options is how the user can choose the condition the feedback activates for
-			//     options: [
-			//         {
-			//             type: 'number',
-			//             label: 'Desired response status:',
-			//             id: 'desiredResponseStatus',
-			//             default: 0,
-			//             min: 0,
-			//             max: 5,
-			//             tooltip: 'Desired response status when the feedback will change',
-			//             required: true,
-			//         },
-			//     ],
-			//     callback: (feedback) => {
-			//         // This callback will be called whenever companion wants to check if this feedback is 'active' and should affect the button style
-			//         console.log('Feedback true here!') //disabled style
-			//         console.log(feedback.options)
-			//         if (feedback.options.currentStatus !== feedback.options.desiredResponseStatus.toString()) {
-			//             console.log('Feedback true here!') //disabled style
-			//             return true
-			//         } else {
-			//             console.log('Feedback false here!')
-			//             feedback.options.currentStatus = undefined
-			//             return false
-			//         }
-			//     },
-			// },
 			[FeedbackTypes.showCanTake]: {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTake,
@@ -252,23 +218,20 @@ export class FeedbacksProvider {
 				callback: (feedback: CompanionFeedbackInfo) => {
 					return this.handleStatusFeedback(feedback)
 				},
-			}
+			},
 		}
 	}
 
 	private unsubscribeFeedback(feedback: CompanionFeedbackInfo) {
-		const drFeedbackInfoFound = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drFeedbackInfo;
+		const drFeedbackInfoFound = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drFeedbackInfo
 		if (drFeedbackInfoFound) {
-			
-			this.drModuleInstance.log('debug', `from unsubscribe  ${drFeedbackInfoFound.requestId.toString()}`)
 			stopStatusTimer(drFeedbackInfoFound) //Just clearing the interval
-			
+
 			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
-			//Assign undefined in the drCompanionInfoFound
-			drCompanionInfo.drFeedbackInfo = undefined;
-			
+			drCompanionInfo.drFeedbackInfo = undefined
+
 			if (drCompanionInfo.drActionInfo === undefined)
-			delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
+				delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
 		}
 	}
 
@@ -277,46 +240,37 @@ export class FeedbacksProvider {
 			id: feedback.id,
 			feedbackId: feedback.feedbackId,
 			options: feedback.options,
-			statusTimer: startStatusTimer(this.drModuleInstance, feedback.feedbackId, feedback.options, statusCommand, requestId),
+			statusTimer: startStatusTimer(
+				this.drModuleInstance,
+				feedback.feedbackId,
+				feedback.options,
+				statusCommand,
+				requestId
+			),
 			requestId: requestId,
 			can: false,
 			statusCommand: statusCommand,
-			responseCode: -1
+			responseCode: -1,
 		}
 
-
 		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId])
-			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo = newDrFeedbackInfo;
+			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo = newDrFeedbackInfo
 		else
-			this.drModuleInstance.drCompanionInfoDict[feedback.controlId] = { drFeedbackInfo: newDrFeedbackInfo, drActionInfo: undefined }
-
+			this.drModuleInstance.drCompanionInfoDict[feedback.controlId] = {
+				drFeedbackInfo: newDrFeedbackInfo,
+				drActionInfo: undefined,
+			}
 	}
 
 	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {
-		// console.log(feedback.options, "feedback.options");
-
-
-		// const info = this.drModuleInstance.drCompanionInfoDict[feedback.controlId];
-		// console.log(this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drActionInfo?.isRunning, "isRunning");
 		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drActionInfo?.isRunning) {
 			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
 			return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
 		} else {
 			if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo?.responseCode === 0) {
-				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = true;
+				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = true
 				return {} //No style (aka all ok, and command is not running)
-				//If action has not been created
-				// if (drCompanionInfo.drActionInfo && !drCompanionInfo.drActionInfo.isRunning) {//If there is an action and is not running then true
-				// 	console.log('Feedback true here!') //disabled style
-				// 	return true
-				// }
-				// return false;
 			} else {
-				// cannot be performed because status code is not "0"
-				//const index = this.drFeedbackInfos.findIndex(df => df.id === drFeedbackInfoFound.id);
-				// if (index !== -1) {
-				// 	this.drFeedbackInfos[index].responseCode = -1;
-				// }
 				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
 				return { bgcolor: combineRgb(255, 0, 0) } //Red color (aka "cannot perform")
 			}

@@ -1,9 +1,4 @@
-// import instance_skel = require('../../../instance_skel')
-// import {
-// 	CompanionConfigField,
-// 	CompanionSystem,
-// } from '../../../instance_skel_types'
-import { CompanionConfigField, InstanceBase, InstanceStatus, SomeCompanionConfigField, runEntrypoint } from '@companion-module/base'
+import { InstanceBase, InstanceStatus, SomeCompanionConfigField, runEntrypoint } from '@companion-module/base'
 import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
 import { DrCompanionInfo } from './drCompanionInfo'
@@ -31,8 +26,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		this.actionsProvider = new ActionsProvider(this)
 		this.feedbacksProvider = new FeedbacksProvider(this)
 		this.presetsProvider = new PresetsProvider(this)
-		this.config = {};
-		this.timers = [];
+		this.config = {}
+		this.timers = []
 		// console.log('VENTUZ: Create Instance')
 		// setInterval(() => {
 		// 	this.log("debug", `COmpanionInfos ==============================================`);
@@ -48,19 +43,17 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		// 		this.log("debug", `${prop}`);
 		// 	}
 
-
 		// }, 5000);
 	}
 	//Main initialization function called once the module is OK to start doing things. Principally, this is when the module should establish a connection to the device.
 	async init(config: DRModuleConfig, _: boolean) {
 		console.log('VENTUZ: Init')
-		this.config = config;
+		this.config = config
 		this.initActions()
 		this.initFeedbacks()
 		this.initPresets()
 		this.initWebSocket()
 		this.startReconnectionTimer(this.config.intervalReconnection)
-
 	}
 
 	initActions() {
@@ -110,17 +103,19 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 				this.updateStatus(InstanceStatus.Ok)
 			}
 
-
 			this.processMessageForFeedback(json)
 
 			this.processMessageForAction(json)
 		}
 	}
-	
+
 	private processMessageForAction(json: any) {
 		let controlIdFound: string = undefined
 		for (const controlId in this.drCompanionInfoDict) {
-			if (this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID && this.drCompanionInfoDict[controlId].drActionInfo?.isRunning) {
+			if (
+				this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID &&
+				this.drCompanionInfoDict[controlId].drActionInfo?.isRunning
+			) {
 				controlIdFound = controlId
 				break
 			}
@@ -162,7 +157,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		console.log('VENTUZ: Destroy')
 		//Stop all remaining timers if any
 		for (const timer of this.timers) {
-			clearInterval(timer);
+			clearInterval(timer)
 		}
 
 		this.stopReconectionTimer()
@@ -182,10 +177,9 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		console.log('VENTUZ: Get Config')
 		return getConfigFields()
 	}
+
 	//When the instance configuration is saved by the user, this update will fire with the new configuration passed. The configuration should be saved to the module, as shown below. This is also a good time to check for any important changes, such as the device IP, which require runtime changes or updates based on the new configuration. An example of resetting a TCP connection is shown in the full sample below.
-
 	async configUpdated(config: DRModuleConfig) {
-
 		if (this.config.intervalReconnection != config.intervalReconnection) {
 			//Resets timer if the interval reconnection changed
 			this.stopReconectionTimer()

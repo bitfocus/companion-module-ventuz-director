@@ -1,6 +1,4 @@
-// import InstanceSkel = require('../../../instance_skel')
-// import { SomeCompanionConfigField } from '../../../instance_skel_types'
-import { InstanceBase, SomeCompanionConfigField, Regex } from '@companion-module/base'
+import { SomeCompanionConfigField, Regex } from '@companion-module/base'
 import { CompanionLabels, Types } from './labels'
 
 export interface DRModuleConfig {
