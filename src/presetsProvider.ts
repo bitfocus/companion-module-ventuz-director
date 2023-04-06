@@ -1,5 +1,4 @@
 import { CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, combineRgb } from '@companion-module/base'
-// import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.'
 import {
@@ -277,12 +276,6 @@ export class PresetsProvider {
 			},
 		}
 	}
-	// This fake option is a hack because it is mandatory to provide a value in the options array.
-	// getFakeOption(): { [key: string]: InputValue } {
-	// 	return {
-	// 		_: '',
-	// 	}
-	// }
 
 	getBankOptions(text: string): CompanionButtonStyleProps {
 		return {

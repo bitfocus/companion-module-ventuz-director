@@ -23,8 +23,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	timers: NodeJS.Timer[]
 	drActionInfoMap: Map<string, DrActionInfo>
 	drFeedbackInfoMap: Map<string, DrFeedbackInfo>
-	//Constrtuctor
-	//See https://github.com/bitfocus/companion/wiki/instance_skel
+	
+	//Constructor
 	constructor(internal: unknown) {
 		super(internal)
 		this.requestIdCounter = 0
@@ -35,24 +35,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		this.timers = []
 		this.drActionInfoMap = new Map<string, DrActionInfo>()
 		this.drFeedbackInfoMap = new Map<string, DrFeedbackInfo>()
-		// console.log('VENTUZ: Create Instance')
-		// setInterval(() => {
-		// 	this.log("debug", `COmpanionInfos ==============================================`);
-		// 	for (const prop in this.drCompanionInfoDict) {
-		// 		this.log("debug", `${prop}: actionId -> ${this.drCompanionInfoDict[prop].drActionInfo.requestId} feedbackId -> ${this.drCompanionInfoDict[prop].drFeedbackInfo.requestId}`);
-		// 	}
-		// 	this.log("debug", `drFeedbacks ==============================================`);
-		// 	for (const prop in this.feedbacksProvider.drFeedbackInfos) {
-		// 		this.log("debug", `${prop}`);
-		// 	}
-		// 	this.log("debug", `drActions ==============================================`);
-		// 	for (const prop in this.actionsProvider.drActionInfos) {
-		// 		this.log("debug", `${prop}`);
-		// 	}
-
-		// }, 5000);
 	}
-	//Main initialization function called once the module is OK to start doing things. Principally, this is when the module should establish a connection to the device.
 	async init(config: DRModuleConfig, _: boolean) {
 		console.log('VENTUZ: Init')
 		this.config = config
@@ -91,7 +74,6 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		}
 		this.wsClient.onclose = (event) => {
 			//console.log('VENTUZ: Connection Closed: ' + JSON.stringify(event))
-			//this.updateStatus(this)
 			console.log('VENTUZ: Connection Closed')
 			this.unsubscribeActionsAndFeedbacks()
 			this.updateStatus(

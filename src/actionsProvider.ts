@@ -675,7 +675,6 @@ export class ActionsProvider {
 	private async handleAdvancedActionCallback(action: CompanionActionEvent) {
 		const canProcess = (drFeedbackInfo: DrFeedbackInfo) => {
 			if (drFeedbackInfo) {
-				//drFeedbackInfo exists?
 				if (drFeedbackInfo.can) {
 					console.log(`VENTUZ: The action with id ${action.id} can be performed as the feedback is false`)
 					return true
