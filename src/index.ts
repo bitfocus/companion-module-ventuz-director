@@ -3,7 +3,7 @@ import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
 import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
-import { getFeedbackIdFromControlId, startStatusTimer } from './helpers'
+import { clearIntervalAndUnassign, getFeedbackIdFromControlId, getFeedbackIdFromRequestId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
 import WebSocket = require('ws')
 
@@ -138,17 +138,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	}
 
 	private processMessageForFeedback(json: any) {
-
-		let feedbackId: string = undefined;
-		let drFeedbackInfo: DrFeedbackInfo = undefined;
-		for (const [key, value] of this.drFeedbackInfoMap) {
-			if (value?.requestId === json.RequestID) {
-				feedbackId = key;
-				drFeedbackInfo = value;
-				break;
-			}
-		}
-
+		const feedbackId = getFeedbackIdFromRequestId(this.drFeedbackInfoMap, json.RequestID);
+		const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId);
 		if (drFeedbackInfo) {
 			drFeedbackInfo.responseCode = json.Code as number
 			this.checkFeedbacksById(feedbackId)
@@ -160,7 +151,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		console.log('VENTUZ: Destroy')
 		//Stop all remaining timers if any
 		for (const timer of this.timers) {
-			clearInterval(timer)
+			clearIntervalAndUnassign(timer);
 		}
 
 		this.stopReconectionTimer()
@@ -211,7 +202,6 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 
 	private startReconnectionTimer(intervalReconnectionSeconds: number) {
 		this.reconectionTimer = setInterval(() => {
-			//3 == CLOSED
 			if (this.wsClient && this.wsClient.readyState === 3) {
 				this.initWebSocket()
 			}
@@ -220,8 +210,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 
 	private stopReconectionTimer() {
 		if (this.reconectionTimer) {
-			clearInterval(this.reconectionTimer)
-			this.reconectionTimer = null
+			clearIntervalAndUnassign(this.reconectionTimer);
 		}
 	}
 }

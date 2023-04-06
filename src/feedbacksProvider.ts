@@ -238,13 +238,7 @@ export class FeedbacksProvider {
 			controlId: feedback.controlId,
 			feedbackId: feedback.feedbackId,
 			options: feedback.options,
-			statusTimer: startStatusTimer(
-				this.drModuleInstance,
-				feedback.feedbackId,
-				feedback.options,
-				statusCommand,
-				requestId
-			),
+			statusTimer: undefined,
 			requestId: requestId,
 			can: false,
 			statusCommand: statusCommand,
@@ -252,6 +246,14 @@ export class FeedbacksProvider {
 		}
 
 		this.drModuleInstance.drFeedbackInfoMap.set(feedback.id, newDrFeedbackInfo);
+
+		newDrFeedbackInfo.statusTimer = startStatusTimer(//Startus timer must be set here (after the map set) so that it is not deleted automatically by the clear mechanism inside the "startStatusTimer" funciton
+			this.drModuleInstance,
+			feedback.feedbackId,
+			feedback.options,
+			statusCommand,
+			requestId
+		)
 	}
 
 	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {

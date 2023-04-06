@@ -195,6 +195,16 @@ export function startStatusTimer(
 	requestId: number
 ) {
 	const sendTimer = setInterval(async () => {
+		
+		const feedbackIdFromRequestId = getFeedbackIdFromRequestId(drModuleInstance.drFeedbackInfoMap, requestId);
+		drModuleInstance.log("debug", `${feedbackIdFromRequestId}: feedbackIdFromRequestId`);
+		drModuleInstance.log("debug", `${requestId}: requestId`);
+		// console.log(drModuleInstance.drFeedbackInfoMap);
+		if (!feedbackIdFromRequestId) { // If feedback does not exists anymore or does not belong to the same feedbackId then force stop
+			clearIntervalAndUnassign(sendTimer);
+			drModuleInstance.log("warn", `timer from ${requestId} terminated`)
+		}
+
 		const message = JSON.stringify(
 			await buildRequestMsg(feedbackId, options, statusCommand, requestId, drModuleInstance)
 		)
@@ -209,10 +219,8 @@ export function startStatusTimer(
 }
 
 export function stopStatusTimer(drFeedbackInfoFound: DrFeedbackInfo) {
-	if (drFeedbackInfoFound) {
-		clearInterval(drFeedbackInfoFound.statusTimer)
-		drFeedbackInfoFound.statusTimer = null
-	}
+	if (drFeedbackInfoFound) 
+		clearIntervalAndUnassign(drFeedbackInfoFound.statusTimer);
 }
 
 export async function buildRequestMsg(
@@ -398,6 +406,15 @@ export function getFeedbackIdFromControlId(drFeedbackInfoMap: Map<string, DrFeed
 	return undefined;
 }
 
+export function getFeedbackIdFromRequestId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, requestID: any): string {
+	for (const [key, value] of drFeedbackInfoMap) {
+		if (value?.requestId === requestID) {
+			return key;
+		}
+	}
+	return undefined;
+}
+
 export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionInfo>, controlId: string): string {
 	for (const [key, value] of drActionInfoMap) {
 		if (value?.controlId === controlId) {
@@ -409,4 +426,9 @@ export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionIn
 
 export function isNumber(value: string | number): boolean {
 	return value != null && value !== '' && !isNaN(Number(value.toString()))
+}
+
+export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
+	clearInterval(timer);
+	timer = null;
 }
