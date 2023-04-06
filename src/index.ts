@@ -3,7 +3,12 @@ import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
 import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
-import { clearIntervalAndUnassign, getFeedbackIdFromControlId, getFeedbackIdFromRequestId, startStatusTimer } from './helpers'
+import {
+	clearIntervalAndUnassign,
+	getFeedbackIdFromControlId,
+	getFeedbackIdFromRequestId,
+	startStatusTimer,
+} from './helpers'
 import { PresetsProvider } from './presetsProvider'
 import WebSocket = require('ws')
 
@@ -16,8 +21,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	presetsProvider: PresetsProvider
 	reconectionTimer: NodeJS.Timer
 	timers: NodeJS.Timer[]
-	drActionInfoMap: Map<string, DrActionInfo>;
-	drFeedbackInfoMap: Map<string, DrFeedbackInfo>;
+	drActionInfoMap: Map<string, DrActionInfo>
+	drFeedbackInfoMap: Map<string, DrFeedbackInfo>
 	//Constrtuctor
 	//See https://github.com/bitfocus/companion/wiki/instance_skel
 	constructor(internal: unknown) {
@@ -28,8 +33,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		this.presetsProvider = new PresetsProvider(this)
 		this.config = {}
 		this.timers = []
-		this.drActionInfoMap = new Map<string, DrActionInfo>();
-		this.drFeedbackInfoMap = new Map<string, DrFeedbackInfo>();
+		this.drActionInfoMap = new Map<string, DrActionInfo>()
+		this.drFeedbackInfoMap = new Map<string, DrFeedbackInfo>()
 		// console.log('VENTUZ: Create Instance')
 		// setInterval(() => {
 		// 	this.log("debug", `COmpanionInfos ==============================================`);
@@ -112,18 +117,17 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	}
 
 	private processMessageForAction(json: any) {
-
-		let drActionInfo: DrActionInfo = undefined;
+		let drActionInfo: DrActionInfo = undefined
 		for (const [_, value] of this.drActionInfoMap) {
 			if (value?.requestId === json.RequestID && value?.isRunning) {
-				drActionInfo = value;
+				drActionInfo = value
 			}
 		}
 
 		if (drActionInfo) {
 			drActionInfo.isRunning = false
-			const feedbackId = getFeedbackIdFromControlId(this.drFeedbackInfoMap, drActionInfo.controlId);
-			const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId);
+			const feedbackId = getFeedbackIdFromControlId(this.drFeedbackInfoMap, drActionInfo.controlId)
+			const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId)
 			if (drFeedbackInfo) {
 				//If it already has a feedback created then restart the timer
 				drFeedbackInfo.statusTimer = startStatusTimer(
@@ -138,8 +142,8 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	}
 
 	private processMessageForFeedback(json: any) {
-		const feedbackId = getFeedbackIdFromRequestId(this.drFeedbackInfoMap, json.RequestID);
-		const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId);
+		const feedbackId = getFeedbackIdFromRequestId(this.drFeedbackInfoMap, json.RequestID)
+		const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId)
 		if (drFeedbackInfo) {
 			drFeedbackInfo.responseCode = json.Code as number
 			this.checkFeedbacksById(feedbackId)
@@ -151,7 +155,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 		console.log('VENTUZ: Destroy')
 		//Stop all remaining timers if any
 		for (const timer of this.timers) {
-			clearIntervalAndUnassign(timer);
+			clearIntervalAndUnassign(timer)
 		}
 
 		this.stopReconectionTimer()
@@ -210,7 +214,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 
 	private stopReconectionTimer() {
 		if (this.reconectionTimer) {
-			clearIntervalAndUnassign(this.reconectionTimer);
+			clearIntervalAndUnassign(this.reconectionTimer)
 		}
 	}
 }

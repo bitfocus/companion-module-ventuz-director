@@ -261,7 +261,8 @@ export const CompanionLabels = {
 	directorRemotingCommands: 'Director Remoting Commands',
 	or: 'Or',
 	saveStateInCustomVarible: 'Save state in custom variable',
-	saveStateInCustomVaribleTooltip: 'Save state in custom variable, the Director module will set a number suffix to ensure uniqueness'
+	saveStateInCustomVaribleTooltip:
+		'Save state in custom variable, the Director module will set a number suffix to ensure uniqueness',
 } as const
 
 //Types of Companion options, presets or feedbacks

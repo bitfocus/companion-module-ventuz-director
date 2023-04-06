@@ -6,8 +6,7 @@
     "build": "rimraf dist && yarn build:main",
     "build:main": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
-    "lint": "eslint . --ext .ts",
-    "postinstall": "yarn build"
+    "format": "prettier -w ."
   },
   "license": "MIT",
   "repository": {

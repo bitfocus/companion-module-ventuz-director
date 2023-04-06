@@ -1,4 +1,4 @@
-import { CompanionOptionValues } from "@companion-module/base"
+import { CompanionOptionValues } from '@companion-module/base'
 
 export interface DrActionInfo {
 	controlId: string
@@ -14,13 +14,13 @@ export interface DrFeedbackInfo {
 	statusTimer: NodeJS.Timer
 	can: boolean
 	statusCommand: string
-	responseCode: number,
-	drVariableInfo: DrVariableInfo,
+	responseCode: number
+	drVariableInfo: DrVariableInfo
 	options: CompanionOptionValues
 }
 
 export interface DrVariableInfo {
 	variableId: string
-	name: string,
+	name: string
 	value: string
 }

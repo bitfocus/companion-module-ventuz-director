@@ -645,7 +645,7 @@ export class ActionsProvider {
 	}
 
 	private unsubscribeAction(action: CompanionActionEvent) {
-		this.drModuleInstance.drActionInfoMap.delete(action.id);
+		this.drModuleInstance.drActionInfoMap.delete(action.id)
 	}
 
 	private subscribeAction(action: CompanionActionEvent, command: string) {
@@ -657,13 +657,11 @@ export class ActionsProvider {
 			requestId: this.drModuleInstance.getRequestId(),
 		}
 
-		this.drModuleInstance.drActionInfoMap.set(action.id, newDrAction);
-
+		this.drModuleInstance.drActionInfoMap.set(action.id, newDrAction)
 	}
 
 	async handleActionCallback(action: CompanionActionEvent) {
-		
-		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id);
+		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id)
 		if (drActionInfoFound) {
 			if (this.commandsWithStatus.includes(drActionInfoFound.command)) await this.handleAdvancedActionCallback(action)
 			else await this.handleSimpleActionCallback(action, drActionInfoFound)
@@ -675,7 +673,6 @@ export class ActionsProvider {
 	}
 
 	private async handleAdvancedActionCallback(action: CompanionActionEvent) {
-		
 		const canProcess = (drFeedbackInfo: DrFeedbackInfo) => {
 			if (drFeedbackInfo) {
 				//drFeedbackInfo exists?
@@ -691,15 +688,15 @@ export class ActionsProvider {
 				return true
 			}
 		}
-		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id);
+		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id)
 
 		if (drActionInfoFound) {
 			console.log(`VENTUZ: Processing action with id: ${action.id}`)
-			const feedbackId = getFeedbackIdFromControlId(this.drModuleInstance.drFeedbackInfoMap, action.controlId);
-			const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedbackId);
+			const feedbackId = getFeedbackIdFromControlId(this.drModuleInstance.drFeedbackInfoMap, action.controlId)
+			const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedbackId)
 			const canPro = canProcess(drFeedbackInfo)
 			if (canPro) {
-				drActionInfoFound.isRunning = true;
+				drActionInfoFound.isRunning = true
 				if (drFeedbackInfo) {
 					stopStatusTimer(drFeedbackInfo)
 					this.drModuleInstance.checkFeedbacksById(feedbackId)

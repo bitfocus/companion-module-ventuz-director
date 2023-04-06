@@ -21,11 +21,6 @@
 		"entrypoint": "..\\dist\\index.js"
 	},
 	"manufacturer": "Ventuz Technology",
-	"products": [
-		"Director"
-	],
-	"keywords": [
-		"Media Server",
-		"Template Graphics"
-	]
+	"products": ["Director"],
+	"keywords": ["Media Server", "Template Graphics"]
 }

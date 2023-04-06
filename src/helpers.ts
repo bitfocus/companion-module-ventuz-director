@@ -1,13 +1,20 @@
 import { CompanionOptionValues, InputValue } from '@companion-module/base'
 import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Others, Types } from './labels'
-import { DRModuleInstance } from '.';
+import { DRModuleInstance } from '.'
 
-export function createOption(type: string, id: string, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): any {
+export function createOption(
+	type: string,
+	id: string,
+	label = undefined,
+	defaultValue = undefined,
+	tooltip = undefined,
+	required = true,
+	min = undefined
+): any {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
 	if (type === Types.textwithvariables) {
-
 		return {
 			type: Types.textInput,
 			id: id,
@@ -15,7 +22,7 @@ export function createOption(type: string, id: string, label = undefined, defaul
 			default: defaultValue && defaultValue,
 			tooltip: tooltip,
 			required: required,
-			useVariables: true
+			useVariables: true,
 		}
 	}
 	return {
@@ -187,8 +194,14 @@ function createOrOption(): any {
 	return createOption(Types.staticText, CompanionLabels.or)
 }
 
-export function getFeedbackCustomVariableOption (): any {
-	return createOption(Types.textInput, Others.feedbackCustomVarIdOption, CompanionLabels.saveStateInCustomVarible, undefined, CompanionLabels.saveStateInCustomVaribleTooltip)
+export function getFeedbackCustomVariableOption(): any {
+	return createOption(
+		Types.textInput,
+		Others.feedbackCustomVarIdOption,
+		CompanionLabels.saveStateInCustomVarible,
+		undefined,
+		CompanionLabels.saveStateInCustomVaribleTooltip
+	)
 }
 
 export function startStatusTimer(
@@ -199,14 +212,14 @@ export function startStatusTimer(
 	requestId: number
 ) {
 	const sendTimer = setInterval(async () => {
-		
-		const feedbackIdFromRequestId = getFeedbackIdFromRequestId(drModuleInstance.drFeedbackInfoMap, requestId);
+		const feedbackIdFromRequestId = getFeedbackIdFromRequestId(drModuleInstance.drFeedbackInfoMap, requestId)
 		// drModuleInstance.log("debug", `${feedbackIdFromRequestId}: feedbackIdFromRequestId`);
 		// drModuleInstance.log("debug", `${requestId}: requestId`);
 		// console.log(drModuleInstance.drFeedbackInfoMap);
-		if (!feedbackIdFromRequestId) { // If feedback does not exists anymore or does not belong to the same feedbackId then force stop
-			clearIntervalAndUnassign(sendTimer);
-			drModuleInstance.log("warn", `timer from ${requestId} terminated`)
+		if (!feedbackIdFromRequestId) {
+			// If feedback does not exists anymore or does not belong to the same feedbackId then force stop
+			clearIntervalAndUnassign(sendTimer)
+			drModuleInstance.log('warn', `timer from ${requestId} terminated`)
 		}
 
 		const message = JSON.stringify(
@@ -218,13 +231,12 @@ export function startStatusTimer(
 		}
 	}, drModuleInstance.config.intervalStatus * 1000)
 
-	drModuleInstance.timers.push(sendTimer);
+	drModuleInstance.timers.push(sendTimer)
 	return sendTimer
 }
 
 export function stopStatusTimer(drFeedbackInfoFound: DrFeedbackInfo) {
-	if (drFeedbackInfoFound) 
-		clearIntervalAndUnassign(drFeedbackInfoFound.statusTimer);
+	if (drFeedbackInfoFound) clearIntervalAndUnassign(drFeedbackInfoFound.statusTimer)
 }
 
 export async function buildRequestMsg(
@@ -373,7 +385,7 @@ export async function buildRequestMsg(
 	return msg
 
 	async function getTextWithVariableValue(inputValue: InputValue): Promise<string> {
-		const value = await drModuleInstance.parseVariablesInString(inputValue.toString());
+		const value = await drModuleInstance.parseVariablesInString(inputValue.toString())
 		return value
 	}
 
@@ -396,7 +408,6 @@ export async function buildRequestMsg(
 				//booleans and othertypoes are set if they are not null
 				msg[optionId] = optionValue
 			}
-
 		}
 	}
 }
@@ -407,16 +418,16 @@ export function getFeedbackIdFromControlId(drFeedbackInfoMap: Map<string, DrFeed
 			return key
 		}
 	}
-	return undefined;
+	return undefined
 }
 
 export function getFeedbackIdFromRequestId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, requestID: any): string {
 	for (const [key, value] of drFeedbackInfoMap) {
 		if (value?.requestId === requestID) {
-			return key;
+			return key
 		}
 	}
-	return undefined;
+	return undefined
 }
 
 export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionInfo>, controlId: string): string {
@@ -425,7 +436,7 @@ export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionIn
 			return key
 		}
 	}
-	return undefined;
+	return undefined
 }
 
 export function isNumber(value: string | number): boolean {
@@ -433,6 +444,6 @@ export function isNumber(value: string | number): boolean {
 }
 
 export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
-	clearInterval(timer);
-	timer = null;
+	clearInterval(timer)
+	timer = null
 }

@@ -2,7 +2,17 @@ import { CompanionButtonStyleProps, CompanionPresetDefinitions, InputValue, comb
 // import { CompanionBankPreset, CompanionPreset, InputValue } from '../../../instance_skel_types'
 import { ActionNames, CompanionLabels, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.'
-import { getMacroExecuteOptions, getPlaylistActivateOptions, getPlaylistRestartOptions, getShowClearOptions, getShowCueOptions, getShowRecueOnAirOptions, getShowTakeOptions, getShowTakeOutOptions, getWindowSetLayoutOptions } from './helpers'
+import {
+	getMacroExecuteOptions,
+	getPlaylistActivateOptions,
+	getPlaylistRestartOptions,
+	getShowClearOptions,
+	getShowCueOptions,
+	getShowRecueOnAirOptions,
+	getShowTakeOptions,
+	getShowTakeOutOptions,
+	getWindowSetLayoutOptions,
+} from './helpers'
 
 export class PresetsProvider {
 	private drModuleInstance: DRModuleInstance
@@ -10,10 +20,9 @@ export class PresetsProvider {
 	constructor(drModuleInstance: DRModuleInstance) {
 		this.drModuleInstance = drModuleInstance
 	}
-	getPresets(): CompanionPresetDefinitions  {
+	getPresets(): CompanionPresetDefinitions {
 		return {
 			[CompanionLabels.showTakePreset]: {
-				
 				type: 'button',
 				category: CompanionLabels.directorRemotingCommands,
 				name: CompanionLabels.showTakePreset,
@@ -24,9 +33,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showTake,
 								options: getShowTakeOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -47,9 +56,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showTakeRecue,
 								options: getShowTakeOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -70,9 +79,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showCue,
 								options: getShowCueOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -93,9 +102,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showRecueOnAir,
 								options: getShowRecueOnAirOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -116,9 +125,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showClear,
 								options: getShowClearOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -139,9 +148,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showTakeOut,
 								options: getShowTakeOutOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -162,9 +171,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.showTakeOutRecue,
 								options: getShowTakeOutOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -185,9 +194,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.playlistRestart,
 								options: getPlaylistRestartOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -208,9 +217,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.playlistActivate,
 								options: getPlaylistActivateOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -231,9 +240,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.macroExecute,
 								options: getMacroExecuteOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [
@@ -254,9 +263,9 @@ export class PresetsProvider {
 							{
 								actionId: ActionNames.windowSetLayout,
 								options: getWindowSetLayoutOptions()[0],
-							}
+							},
 						],
-						up: []
+						up: [],
 					},
 				],
 				feedbacks: [

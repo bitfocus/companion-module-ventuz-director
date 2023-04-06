@@ -36,7 +36,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTake,
 				description: CompanionLabels.showCanTakeDescription,
-				options: [...getShowTakeOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowTakeOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					const rid = this.drModuleInstance.getRequestId()
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, rid)
@@ -52,7 +52,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeRecue,
 				description: CompanionLabels.showCanTakeRecueDescription,
-				options: [...getShowTakeOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowTakeOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTake, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.take" status command, as there is no "show.can.takerecue" command in Director Remoting it is not necessary
 				},
@@ -67,7 +67,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanCue,
 				description: CompanionLabels.showCanCueDescription,
-				options: [...getShowCueOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowCueOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCue, this.drModuleInstance.getRequestId())
 				},
@@ -82,17 +82,19 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanCueChannel,
 				description: CompanionLabels.showCanCueChannelDescription,
-				options: [...[
-					createOption(
-						Types.textwithvariables,
-						DRProperties.channelIndex,
-						CompanionLabels.channelIndex,
-						undefined,
-						undefined,
-						false,
-						0
-					) as SomeCompanionFeedbackInputField,
-					getFeedbackCustomVariableOption()]
+				options: [
+					...[
+						createOption(
+							Types.textwithvariables,
+							DRProperties.channelIndex,
+							CompanionLabels.channelIndex,
+							undefined,
+							undefined,
+							false,
+							0
+						) as SomeCompanionFeedbackInputField,
+						getFeedbackCustomVariableOption(),
+					],
 				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanCueChannel, this.drModuleInstance.getRequestId())
@@ -108,7 +110,10 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanRecueOnAir,
 				description: CompanionLabels.showCanRecueOnAirDescription,
-				options: [...getShowRecueOnAirOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [
+					...(getShowRecueOnAirOptions() as SomeCompanionFeedbackInputField[]),
+					getFeedbackCustomVariableOption(),
+				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanRecueOnAir, this.drModuleInstance.getRequestId())
 				},
@@ -123,7 +128,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanClear,
 				description: CompanionLabels.showCanClearDescription,
-				options: [...getShowClearOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowClearOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanClear, this.drModuleInstance.getRequestId())
 				},
@@ -138,7 +143,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeOut,
 				description: CompanionLabels.showCanTakeOutDescription,
-				options: [...getShowTakeOutOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowTakeOutOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId())
 				},
@@ -153,7 +158,7 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.showCanTakeOutRecue,
 				description: CompanionLabels.showCanTakeOutRecueDescription,
-				options: [...getShowTakeOutOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [...(getShowTakeOutOptions() as SomeCompanionFeedbackInputField[]), getFeedbackCustomVariableOption()],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.showCanTakeOut, this.drModuleInstance.getRequestId()) // Note that it also uses the "show.can.takeout" status command, as there is no "show.can.takeoutrecue" command in Director Remoting it is not necessary
 				},
@@ -168,7 +173,10 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.playlistCanRestart,
 				description: CompanionLabels.playlistCanRestartDescription,
-				options: [...getPlaylistRestartOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [
+					...(getPlaylistRestartOptions() as SomeCompanionFeedbackInputField[]),
+					getFeedbackCustomVariableOption(),
+				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanRestart, this.drModuleInstance.getRequestId())
 				},
@@ -183,7 +191,10 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.playlistCanActivate,
 				description: CompanionLabels.playlistCanActivateDescription,
-				options: [...getPlaylistActivateOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [
+					...(getPlaylistActivateOptions() as SomeCompanionFeedbackInputField[]),
+					getFeedbackCustomVariableOption(),
+				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.playlistCanActivate, this.drModuleInstance.getRequestId())
 				},
@@ -198,7 +209,10 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.macroCanExecute,
 				description: CompanionLabels.macroCanExecuteDescription,
-				options: [...getMacroExecuteOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [
+					...(getMacroExecuteOptions() as SomeCompanionFeedbackInputField[]),
+					getFeedbackCustomVariableOption(),
+				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.macroCanExecute, this.drModuleInstance.getRequestId())
 				},
@@ -213,7 +227,10 @@ export class FeedbacksProvider {
 				type: Types.advanced,
 				name: CompanionLabels.windowCanSetLayout,
 				description: CompanionLabels.windowCanSetLayoutDescription,
-				options: [...getWindowSetLayoutOptions() as SomeCompanionFeedbackInputField[], getFeedbackCustomVariableOption()],
+				options: [
+					...(getWindowSetLayoutOptions() as SomeCompanionFeedbackInputField[]),
+					getFeedbackCustomVariableOption(),
+				],
 				subscribe: (feedback: CompanionFeedbackInfo) => {
 					this.subscribeFeedback(feedback, DRCommands.windowCanSetLayout, this.drModuleInstance.getRequestId())
 				},
@@ -228,25 +245,25 @@ export class FeedbacksProvider {
 	}
 
 	private unsubscribeFeedback(feedback: CompanionFeedbackInfo) {
-		const drFeedbackInfoFound = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id);
+		const drFeedbackInfoFound = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id)
 		if (drFeedbackInfoFound) {
 			stopStatusTimer(drFeedbackInfoFound) //Just clearing the interval
 
-			this.drModuleInstance.drFeedbackInfoMap.delete(feedback.id);
+			this.drModuleInstance.drFeedbackInfoMap.delete(feedback.id)
 
-			this.setVariableDefinitionsInCompanion();
-
+			this.setVariableDefinitionsInCompanion()
 		}
 	}
 
 	private subscribeFeedback(feedback: CompanionFeedbackInfo, statusCommand: string, requestId: number) {
-		const varNameRaw = feedback.options[Others.feedbackCustomVarIdOption];
-		const varName = varNameRaw ? varNameRaw.toString() : undefined;
+		const varNameRaw = feedback.options[Others.feedbackCustomVarIdOption]
+		const varName = varNameRaw ? varNameRaw.toString() : undefined
 		let variableId: string = undefined
-		if (varName) { //The user wants a customvariable
-			variableId = `${varName}_${requestId.toString()}`;
+		if (varName) {
+			//The user wants a customvariable
+			variableId = `${varName}_${requestId.toString()}`
 		}
-		
+
 		const newDrFeedbackInfo: DrFeedbackInfo = {
 			controlId: feedback.controlId,
 			feedbackId: feedback.feedbackId,
@@ -259,10 +276,10 @@ export class FeedbacksProvider {
 			responseCode: -1,
 		}
 
+		this.drModuleInstance.drFeedbackInfoMap.set(feedback.id, newDrFeedbackInfo)
 
-		this.drModuleInstance.drFeedbackInfoMap.set(feedback.id, newDrFeedbackInfo);
-
-		newDrFeedbackInfo.statusTimer = startStatusTimer(//Startus timer must be set here (after the map set) so that it is not deleted automatically by the clear mechanism inside the "startStatusTimer" funciton
+		newDrFeedbackInfo.statusTimer = startStatusTimer(
+			//Startus timer must be set here (after the map set) so that it is not deleted automatically by the clear mechanism inside the "startStatusTimer" funciton
 			this.drModuleInstance,
 			feedback.feedbackId,
 			feedback.options,
@@ -270,7 +287,6 @@ export class FeedbacksProvider {
 			requestId
 		)
 		this.setVariableDefinitionsInCompanion()
-
 	}
 
 	private setVariableDefinitionsInCompanion() {
@@ -278,18 +294,19 @@ export class FeedbacksProvider {
 		for (const [key] of this.drModuleInstance.drFeedbackInfoMap) {
 			const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(key)
 			const drVariableInfo = drFeedbackInfo.drVariableInfo
-			if (drVariableInfo) { // can be falsy if the user had not set a variable.
+			if (drVariableInfo) {
+				// can be falsy if the user had not set a variable.
 				varaibleDefinitions.push({ variableId: drVariableInfo.variableId, name: drFeedbackInfo.drVariableInfo.name })
 			}
 		}
-		this.drModuleInstance.log("debug", `Inserting ${varaibleDefinitions.length} variables`)
+		this.drModuleInstance.log('debug', `Inserting ${varaibleDefinitions.length} variables`)
 		this.drModuleInstance.setVariableDefinitions(varaibleDefinitions)
 	}
 
 	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {
-		const actionId = getActionIdFromControlId(this.drModuleInstance.drActionInfoMap, feedback.controlId);
-		const drActionInfo = this.drModuleInstance.drActionInfoMap.get(actionId);
-		const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id);
+		const actionId = getActionIdFromControlId(this.drModuleInstance.drActionInfoMap, feedback.controlId)
+		const drActionInfo = this.drModuleInstance.drActionInfoMap.get(actionId)
+		const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id)
 
 		if (drActionInfo?.isRunning) {
 			drFeedbackInfo.can = false
