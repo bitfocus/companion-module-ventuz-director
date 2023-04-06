@@ -15,5 +15,12 @@ export interface DrFeedbackInfo {
 	can: boolean
 	statusCommand: string
 	responseCode: number,
+	drVariableInfo: DrVariableInfo,
 	options: CompanionOptionValues
+}
+
+export interface DrVariableInfo {
+	variableId: string
+	name: string,
+	value: string
 }

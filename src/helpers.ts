@@ -1,6 +1,6 @@
 import { CompanionOptionValues, InputValue } from '@companion-module/base'
 import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
-import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
+import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Others, Types } from './labels'
 import { DRModuleInstance } from '.';
 
 export function createOption(type: string, id: string, label = undefined, defaultValue = undefined, tooltip = undefined, required = true, min = undefined): any {
@@ -187,6 +187,10 @@ function createOrOption(): any {
 	return createOption(Types.staticText, CompanionLabels.or)
 }
 
+export function getFeedbackCustomVariableOption (): any {
+	return createOption(Types.textInput, Others.feedbackCustomVarIdOption, CompanionLabels.saveStateInCustomVarible, undefined, CompanionLabels.saveStateInCustomVaribleTooltip)
+}
+
 export function startStatusTimer(
 	drModuleInstance: DRModuleInstance,
 	feedbackId: string,
@@ -197,8 +201,8 @@ export function startStatusTimer(
 	const sendTimer = setInterval(async () => {
 		
 		const feedbackIdFromRequestId = getFeedbackIdFromRequestId(drModuleInstance.drFeedbackInfoMap, requestId);
-		drModuleInstance.log("debug", `${feedbackIdFromRequestId}: feedbackIdFromRequestId`);
-		drModuleInstance.log("debug", `${requestId}: requestId`);
+		// drModuleInstance.log("debug", `${feedbackIdFromRequestId}: feedbackIdFromRequestId`);
+		// drModuleInstance.log("debug", `${requestId}: requestId`);
 		// console.log(drModuleInstance.drFeedbackInfoMap);
 		if (!feedbackIdFromRequestId) { // If feedback does not exists anymore or does not belong to the same feedbackId then force stop
 			clearIntervalAndUnassign(sendTimer);
