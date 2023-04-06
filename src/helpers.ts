@@ -1,5 +1,5 @@
 import { CompanionOptionValues, InputValue } from '@companion-module/base'
-import { DrFeedbackInfo } from './drCompanionInfo'
+import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.';
 
@@ -387,6 +387,24 @@ export async function buildRequestMsg(
 
 		}
 	}
+}
+
+export function getFeedbackIdFromControlId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, controlId: string): string {
+	for (const [key, value] of drFeedbackInfoMap) {
+		if (value?.controlId === controlId) {
+			return key
+		}
+	}
+	return undefined;
+}
+
+export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionInfo>, controlId: string): string {
+	for (const [key, value] of drActionInfoMap) {
+		if (value?.controlId === controlId) {
+			return key
+		}
+	}
+	return undefined;
 }
 
 export function isNumber(value: string | number): boolean {

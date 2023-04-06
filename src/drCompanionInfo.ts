@@ -1,14 +1,14 @@
 import { CompanionOptionValues } from "@companion-module/base"
 
 export interface DrActionInfo {
-	id: string
+	controlId: string
 	command: string
 	isRunning: boolean
 	requestId: number //Will be checked in the CheckStatusResponseFeedback callback.
 }
 
 export interface DrFeedbackInfo {
-	id: string
+	controlId: string
 	feedbackId: string
 	requestId: number
 	statusTimer: NodeJS.Timer
@@ -17,6 +17,3 @@ export interface DrFeedbackInfo {
 	responseCode: number,
 	options: CompanionOptionValues
 }
-
-
-export type DrCompanionInfo = { [controlId: string]: { drFeedbackInfo: DrFeedbackInfo, drActionInfo: DrActionInfo } };

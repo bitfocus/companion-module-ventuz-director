@@ -1,9 +1,9 @@
 import { InstanceBase, InstanceStatus, SomeCompanionConfigField, runEntrypoint } from '@companion-module/base'
 import { ActionsProvider } from './actionsProvider'
 import { DRModuleConfig, getConfigFields } from './config'
-import { DrCompanionInfo } from './drCompanionInfo'
+import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import { FeedbacksProvider } from './feedbacksProvider'
-import { startStatusTimer } from './helpers'
+import { getFeedbackIdFromControlId, startStatusTimer } from './helpers'
 import { PresetsProvider } from './presetsProvider'
 import WebSocket = require('ws')
 
@@ -11,23 +11,25 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	config: DRModuleConfig
 	requestIdCounter: number
 	wsClient: WebSocket
-	drCompanionInfoDict: DrCompanionInfo
 	actionsProvider: ActionsProvider
 	feedbacksProvider: FeedbacksProvider
 	presetsProvider: PresetsProvider
 	reconectionTimer: NodeJS.Timer
 	timers: NodeJS.Timer[]
+	drActionInfoMap: Map<string, DrActionInfo>;
+	drFeedbackInfoMap: Map<string, DrFeedbackInfo>;
 	//Constrtuctor
 	//See https://github.com/bitfocus/companion/wiki/instance_skel
 	constructor(internal: unknown) {
 		super(internal)
-		this.drCompanionInfoDict = {}
 		this.requestIdCounter = 0
 		this.actionsProvider = new ActionsProvider(this)
 		this.feedbacksProvider = new FeedbacksProvider(this)
 		this.presetsProvider = new PresetsProvider(this)
 		this.config = {}
 		this.timers = []
+		this.drActionInfoMap = new Map<string, DrActionInfo>();
+		this.drFeedbackInfoMap = new Map<string, DrFeedbackInfo>();
 		// console.log('VENTUZ: Create Instance')
 		// setInterval(() => {
 		// 	this.log("debug", `COmpanionInfos ==============================================`);
@@ -110,45 +112,46 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	}
 
 	private processMessageForAction(json: any) {
-		let controlIdFound: string = undefined
-		for (const controlId in this.drCompanionInfoDict) {
-			if (
-				this.drCompanionInfoDict[controlId].drActionInfo?.requestId === json.RequestID &&
-				this.drCompanionInfoDict[controlId].drActionInfo?.isRunning
-			) {
-				controlIdFound = controlId
-				break
+
+		let drActionInfo: DrActionInfo = undefined;
+		for (const [_, value] of this.drActionInfoMap) {
+			if (value?.requestId === json.RequestID && value?.isRunning) {
+				drActionInfo = value;
 			}
 		}
 
-		if (controlIdFound) {
-			const drCompanionInfo = this.drCompanionInfoDict[controlIdFound]
-			drCompanionInfo.drActionInfo.isRunning = false
-			if (drCompanionInfo.drFeedbackInfo) {
+		if (drActionInfo) {
+			drActionInfo.isRunning = false
+			const feedbackId = getFeedbackIdFromControlId(this.drFeedbackInfoMap, drActionInfo.controlId);
+			const drFeedbackInfo = this.drFeedbackInfoMap.get(feedbackId);
+			if (drFeedbackInfo) {
 				//If it already has a feedback created then restart the timer
-				drCompanionInfo.drFeedbackInfo.statusTimer = startStatusTimer(
+				drFeedbackInfo.statusTimer = startStatusTimer(
 					this,
-					drCompanionInfo.drFeedbackInfo.feedbackId,
-					drCompanionInfo.drFeedbackInfo.options,
-					drCompanionInfo.drFeedbackInfo.statusCommand,
-					drCompanionInfo.drFeedbackInfo.requestId
+					drFeedbackInfo.feedbackId,
+					drFeedbackInfo.options,
+					drFeedbackInfo.statusCommand,
+					drFeedbackInfo.requestId
 				)
 			}
 		}
 	}
 
 	private processMessageForFeedback(json: any) {
-		let controlIdFound: string = undefined
-		for (const controlId in this.drCompanionInfoDict) {
-			if (this.drCompanionInfoDict[controlId].drFeedbackInfo?.requestId === +(json.RequestID as string)) {
-				controlIdFound = controlId
-				break
+
+		let feedbackId: string = undefined;
+		let drFeedbackInfo: DrFeedbackInfo = undefined;
+		for (const [key, value] of this.drFeedbackInfoMap) {
+			if (value?.requestId === json.RequestID) {
+				feedbackId = key;
+				drFeedbackInfo = value;
+				break;
 			}
 		}
 
-		if (this.drCompanionInfoDict[controlIdFound]?.drFeedbackInfo) {
-			this.drCompanionInfoDict[controlIdFound].drFeedbackInfo.responseCode = json.Code as number
-			this.checkFeedbacksById(this.drCompanionInfoDict[controlIdFound].drFeedbackInfo.id)
+		if (drFeedbackInfo) {
+			drFeedbackInfo.responseCode = json.Code as number
+			this.checkFeedbacksById(feedbackId)
 		}
 	}
 

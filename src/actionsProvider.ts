@@ -3,6 +3,7 @@ import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
 import {
 	buildRequestMsg,
 	createOption,
+	getFeedbackIdFromControlId,
 	getMacroExecuteOptions,
 	getPlaylistActivateOptions,
 	getPlaylistRestartOptions,
@@ -644,40 +645,25 @@ export class ActionsProvider {
 	}
 
 	private unsubscribeAction(action: CompanionActionEvent) {
-		const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[action.controlId]
-		//Assign undefined in the drCompanionInfo
-		drCompanionInfo.drActionInfo = undefined
-
-		if (drCompanionInfo.drFeedbackInfo === undefined) delete this.drModuleInstance.drCompanionInfoDict[action.controlId]
+		this.drModuleInstance.drActionInfoMap.delete(action.id);
 	}
 
 	private subscribeAction(action: CompanionActionEvent, command: string) {
 		//Creating new drAction
-		const newDrAction = {
-			id: action.id,
+		const newDrAction: DrActionInfo = {
+			controlId: action.controlId,
 			command: command,
 			isRunning: false,
 			requestId: this.drModuleInstance.getRequestId(),
 		}
 
-		if (this.drModuleInstance.drCompanionInfoDict[action.controlId])
-			this.drModuleInstance.drCompanionInfoDict[action.controlId].drActionInfo = newDrAction
-		else
-			this.drModuleInstance.drCompanionInfoDict[action.controlId] = {
-				drFeedbackInfo: undefined,
-				drActionInfo: newDrAction,
-			}
+		this.drModuleInstance.drActionInfoMap.set(action.id, newDrAction);
+
 	}
 
 	async handleActionCallback(action: CompanionActionEvent) {
-		let controlIdFound: string = undefined
-		for (const controlId in this.drModuleInstance.drCompanionInfoDict) {
-			if (this.drModuleInstance.drCompanionInfoDict[controlId].drActionInfo?.id === action.id) {
-				controlIdFound = controlId
-				break
-			}
-		}
-		const drActionInfoFound = this.drModuleInstance.drCompanionInfoDict[controlIdFound]?.drActionInfo
+		
+		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id);
 		if (drActionInfoFound) {
 			if (this.commandsWithStatus.includes(drActionInfoFound.command)) await this.handleAdvancedActionCallback(action)
 			else await this.handleSimpleActionCallback(action, drActionInfoFound)
@@ -689,6 +675,7 @@ export class ActionsProvider {
 	}
 
 	private async handleAdvancedActionCallback(action: CompanionActionEvent) {
+		
 		const canProcess = (drFeedbackInfo: DrFeedbackInfo) => {
 			if (drFeedbackInfo) {
 				//drFeedbackInfo exists?
@@ -704,32 +691,20 @@ export class ActionsProvider {
 				return true
 			}
 		}
-		const info = this.drModuleInstance.drCompanionInfoDict[action.controlId]// // IMPORTANT Sometimes "controlId" comes as "bank:undefined-undefined", that is why we have to check here for Truthiness: https://bitfocusio.slack.com/archives/CFG7HAN5N/p1680708750500569
-		if (info) {
+		const drActionInfoFound = this.drModuleInstance.drActionInfoMap.get(action.id);
 
-			console.log(`VENTUZ: Processing action with id: ${action.id}`) //Printing the entire object so that we can catch errors better
-			const canPro = canProcess(info.drFeedbackInfo)
+		if (drActionInfoFound) {
+			console.log(`VENTUZ: Processing action with id: ${action.id}`)
+			const feedbackId = getFeedbackIdFromControlId(this.drModuleInstance.drFeedbackInfoMap, action.controlId);
+			const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedbackId);
+			const canPro = canProcess(drFeedbackInfo)
 			if (canPro) {
-				info.drActionInfo.isRunning = true
-				if (info.drFeedbackInfo) {
-					stopStatusTimer(info.drFeedbackInfo)
-					this.drModuleInstance.checkFeedbacksById(info.drFeedbackInfo.id)
-					await this.processAction(action, info.drActionInfo)
+				drActionInfoFound.isRunning = true;
+				if (drFeedbackInfo) {
+					stopStatusTimer(drFeedbackInfo)
+					this.drModuleInstance.checkFeedbacksById(feedbackId)
 				}
-			}
-		}
-		else {
-			//All this is a workaround due to the controlId issue:
-
-			let drAction: DrActionInfo = null;
-			for (const controlId in this.drModuleInstance.drCompanionInfoDict) {
-				if (this.drModuleInstance.drCompanionInfoDict[controlId]?.drActionInfo?.id === action.id) {
-					drAction = this.drModuleInstance.drCompanionInfoDict[controlId].drActionInfo;
-					break
-				}
-			}
-			if (drAction) {
-				await this.processAction(action, drAction)
+				await this.processAction(action, drActionInfoFound)
 			}
 		}
 	}

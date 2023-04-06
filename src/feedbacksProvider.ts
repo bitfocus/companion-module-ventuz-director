@@ -6,6 +6,7 @@ import {
 } from '@companion-module/base'
 import {
 	createOption,
+	getActionIdFromControlId,
 	getMacroExecuteOptions,
 	getPlaylistActivateOptions,
 	getPlaylistRestartOptions,
@@ -20,6 +21,7 @@ import {
 } from './helpers'
 import { CompanionLabels, DRCommands, DRProperties, FeedbackTypes, Types } from './labels'
 import { DRModuleInstance } from '.'
+import { DrFeedbackInfo } from './drCompanionInfo'
 
 export class FeedbacksProvider {
 	private drModuleInstance: DRModuleInstance
@@ -223,21 +225,17 @@ export class FeedbacksProvider {
 	}
 
 	private unsubscribeFeedback(feedback: CompanionFeedbackInfo) {
-		const drFeedbackInfoFound = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drFeedbackInfo
+		const drFeedbackInfoFound = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id);
 		if (drFeedbackInfoFound) {
 			stopStatusTimer(drFeedbackInfoFound) //Just clearing the interval
 
-			const drCompanionInfo = this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
-			drCompanionInfo.drFeedbackInfo = undefined
-
-			if (drCompanionInfo.drActionInfo === undefined)
-				delete this.drModuleInstance.drCompanionInfoDict[feedback.controlId]
+			this.drModuleInstance.drActionInfoMap.delete(feedback.id);
 		}
 	}
 
 	private subscribeFeedback(feedback: CompanionFeedbackInfo, statusCommand: string, requestId: number) {
-		const newDrFeedbackInfo = {
-			id: feedback.id,
+		const newDrFeedbackInfo: DrFeedbackInfo = {
+			controlId: feedback.controlId,
 			feedbackId: feedback.feedbackId,
 			options: feedback.options,
 			statusTimer: startStatusTimer(
@@ -253,25 +251,23 @@ export class FeedbacksProvider {
 			responseCode: -1,
 		}
 
-		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId])
-			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo = newDrFeedbackInfo
-		else
-			this.drModuleInstance.drCompanionInfoDict[feedback.controlId] = {
-				drFeedbackInfo: newDrFeedbackInfo,
-				drActionInfo: undefined,
-			}
+		this.drModuleInstance.drFeedbackInfoMap.set(feedback.id, newDrFeedbackInfo);
 	}
 
 	private handleStatusFeedback(feedback: CompanionFeedbackInfo) {
-		if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId]?.drActionInfo?.isRunning) {
-			this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
+		const actionId = getActionIdFromControlId(this.drModuleInstance.drActionInfoMap, feedback.controlId);
+		const drActionInfo = this.drModuleInstance.drActionInfoMap.get(actionId);
+		const drFeedbackInfo = this.drModuleInstance.drFeedbackInfoMap.get(feedback.id);
+		
+		if (drActionInfo?.isRunning) {
+			drFeedbackInfo.can = false
 			return { bgcolor: combineRgb(255, 255, 0) } //Yellow color (aka "is running")
 		} else {
-			if (this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo?.responseCode === 0) {
-				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = true
+			if (drFeedbackInfo?.responseCode === 0) {
+				drFeedbackInfo.can = true
 				return {} //No style (aka all ok, and command is not running)
 			} else {
-				this.drModuleInstance.drCompanionInfoDict[feedback.controlId].drFeedbackInfo.can = false
+				drFeedbackInfo.can = false
 				return { bgcolor: combineRgb(255, 0, 0) } //Red color (aka "cannot perform")
 			}
 		}
