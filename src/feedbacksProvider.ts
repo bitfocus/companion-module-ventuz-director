@@ -23,7 +23,7 @@ import {
 } from './helpers'
 import { CompanionLabels, DRCommands, DRProperties, FeedbackTypes, Others, Types } from './labels'
 import { DRModuleInstance } from '.'
-import { DrFeedbackInfo, DrVariableInfo } from './drCompanionInfo'
+import { DrFeedbackInfo } from './drCompanionInfo'
 
 export class FeedbacksProvider {
 	private drModuleInstance: DRModuleInstance
