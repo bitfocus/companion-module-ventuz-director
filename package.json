@@ -14,7 +14,7 @@
     "url": "git+https://github.com/bitfocus/companion-module-ventuz-director.git"
   },
   "dependencies": {
-    "@companion-module/base": "~1.4.0",
+    "@companion-module/base": "~1.2.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
