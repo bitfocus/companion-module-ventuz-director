@@ -6,7 +6,7 @@
 		"module": "commonjs", //otherwise you get "Import assignment cannot be used when targeting ECMAScript modules"
 		"target": "es2018",
 		"moduleResolution": "node",
-			"skipLibCheck": true
+		"skipLibCheck": true
 	},
 	"exclude": ["node_modules"]
 }

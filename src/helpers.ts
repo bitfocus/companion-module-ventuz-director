@@ -1,19 +1,30 @@
-import DRModuleInstance = require('.')
-import { CompanionFeedbackEvent, InputValue, SomeCompanionInputField } from '../../../instance_skel_types'
-import { DrFeedbackInfo } from './drCompanionInfo'
-import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Types } from './labels'
+import { CompanionOptionValues, InputValue } from '@companion-module/base'
+import { DrActionInfo, DrFeedbackInfo } from './drCompanionInfo'
+import { ActionNames, CompanionLabels, DRProperties, FeedbackTypes, Others, Types } from './labels'
+import { DRModuleInstance } from '.'
 
 export function createOption(
-	type,
-	id,
+	type: string,
+	id: string,
 	label = undefined,
 	defaultValue = undefined,
 	tooltip = undefined,
 	required = true,
 	min = undefined
-) {
+): any {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
+	if (type === Types.textwithvariables) {
+		return {
+			type: Types.textInput,
+			id: id,
+			label: label,
+			default: defaultValue && defaultValue,
+			tooltip: tooltip,
+			required: required,
+			useVariables: true,
+		}
+	}
 	return {
 		type: type,
 		id: id,
@@ -25,7 +36,7 @@ export function createOption(
 	}
 }
 
-export function getShowTakeOptions(): SomeCompanionInputField[] {
+export function getShowTakeOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -39,7 +50,7 @@ export function getShowTakeOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowRecueOnAirOptions(): SomeCompanionInputField[] {
+export function getShowRecueOnAirOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -53,7 +64,7 @@ export function getShowRecueOnAirOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowClearOptions(): SomeCompanionInputField[] {
+export function getShowClearOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -67,7 +78,7 @@ export function getShowClearOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowTakeOutOptions(): SomeCompanionInputField[] {
+export function getShowTakeOutOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -81,7 +92,7 @@ export function getShowTakeOutOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getShowCueOptions(): SomeCompanionInputField[] {
+export function getShowCueOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData),
 		createOrOption(),
@@ -119,7 +130,7 @@ export function getShowCueOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getPlaylistRestartOptions(): SomeCompanionInputField[] {
+export function getPlaylistRestartOptions(): any[] {
 	return [
 		createOption(
 			Types.textwithvariables,
@@ -133,7 +144,7 @@ export function getPlaylistRestartOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getPlaylistActivateOptions(): SomeCompanionInputField[] {
+export function getPlaylistActivateOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.index),
 		createOrOption(),
@@ -163,7 +174,7 @@ export function getPlaylistActivateOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getMacroExecuteOptions(): SomeCompanionInputField[] {
+export function getMacroExecuteOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.id),
 		createOrOption(),
@@ -171,7 +182,7 @@ export function getMacroExecuteOptions(): SomeCompanionInputField[] {
 	]
 }
 
-export function getWindowSetLayoutOptions(): SomeCompanionInputField[] {
+export function getWindowSetLayoutOptions(): any[] {
 	return [
 		createOption(Types.textwithvariables, DRProperties.index),
 		createOrOption(),
@@ -179,19 +190,40 @@ export function getWindowSetLayoutOptions(): SomeCompanionInputField[] {
 	]
 }
 
-function createOrOption(): SomeCompanionInputField {
-	return createOption(Types.text, CompanionLabels.or)
+function createOrOption(): any {
+	return createOption(Types.staticText, CompanionLabels.or)
+}
+
+export function getFeedbackCustomVariableOption(): any {
+	return createOption(
+		Types.textInput,
+		Others.feedbackCustomVarIdOption,
+		CompanionLabels.saveStateInCustomVarible,
+		undefined,
+		CompanionLabels.saveStateInCustomVaribleTooltip
+	)
 }
 
 export function startStatusTimer(
 	drModuleInstance: DRModuleInstance,
-	feedback: CompanionFeedbackEvent,
+	feedbackId: string,
+	options: CompanionOptionValues,
 	statusCommand: string,
 	requestId: number
 ) {
-	const sendTimer = setInterval(() => {
+	const sendTimer = setInterval(async () => {
+		const feedbackIdFromRequestId = getFeedbackIdFromRequestId(drModuleInstance.drFeedbackInfoMap, requestId)
+		// drModuleInstance.log("debug", `${feedbackIdFromRequestId}: feedbackIdFromRequestId`);
+		// drModuleInstance.log("debug", `${requestId}: requestId`);
+		// console.log(drModuleInstance.drFeedbackInfoMap);
+		if (!feedbackIdFromRequestId) {
+			// If feedback does not exists anymore or does not belong to the same feedbackId then force stop
+			clearIntervalAndUnassign(sendTimer)
+			drModuleInstance.log('warn', `timer from ${requestId} terminated`)
+		}
+
 		const message = JSON.stringify(
-			buildRequestMsg(feedback.type, feedback.options, statusCommand, requestId, drModuleInstance)
+			await buildRequestMsg(feedbackId, options, statusCommand, requestId, drModuleInstance)
 		)
 		// 1 === WebSocket OPEN
 		if (drModuleInstance.wsClient && drModuleInstance.wsClient.readyState === 1) {
@@ -199,17 +231,15 @@ export function startStatusTimer(
 		}
 	}, drModuleInstance.config.intervalStatus * 1000)
 
+	drModuleInstance.timers.push(sendTimer)
 	return sendTimer
 }
 
 export function stopStatusTimer(drFeedbackInfoFound: DrFeedbackInfo) {
-	if (drFeedbackInfoFound) {
-		clearInterval(drFeedbackInfoFound.statusTimer)
-		drFeedbackInfoFound.statusTimer = null
-	}
+	if (drFeedbackInfoFound) clearIntervalAndUnassign(drFeedbackInfoFound.statusTimer)
 }
 
-export function buildRequestMsg(
+export async function buildRequestMsg(
 	actionNameOrFeedbackType: string,
 	options: { [key: string]: InputValue | undefined },
 	command: string,
@@ -224,44 +254,44 @@ export function buildRequestMsg(
 	switch (actionNameOrFeedbackType) {
 		case ActionNames.windowSetLayout:
 		case FeedbackTypes.windowCanSetLayout: {
-			addOptionToRequest(options, msg, DRProperties.index)
-			addOptionToRequest(options, msg, DRProperties.name)
+			await addOptionToRequest(options, msg, DRProperties.index)
+			await addOptionToRequest(options, msg, DRProperties.name)
 			break
 		}
 		case ActionNames.topologySet: {
-			addOptionToRequest(options, msg, DRProperties.name)
-			addOptionToRequest(options, msg, DRProperties.saveTopology)
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.name)
+			await addOptionToRequest(options, msg, DRProperties.saveTopology)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.remotePlaylistOpen: {
-			addOptionToRequest(options, msg, DRProperties.playlistId)
-			addOptionToRequest(options, msg, DRProperties.specialAction, true)
-			addOptionToRequest(options, msg, DRProperties.publishContextName)
-			addOptionToRequest(options, msg, DRProperties.publishContextId)
-			addOptionToRequest(options, msg, DRProperties.uri)
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.playlistId)
+			await addOptionToRequest(options, msg, DRProperties.specialAction, true)
+			await addOptionToRequest(options, msg, DRProperties.publishContextName)
+			await addOptionToRequest(options, msg, DRProperties.publishContextId)
+			await addOptionToRequest(options, msg, DRProperties.uri)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.showOpen: {
-			addOptionToRequest(options, msg, DRProperties.uri)
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.uri)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.showClose: {
-			addOptionToRequest(options, msg, DRProperties.clearRenderer)
-			addOptionToRequest(options, msg, DRProperties.saveShow)
+			await addOptionToRequest(options, msg, DRProperties.clearRenderer)
+			await addOptionToRequest(options, msg, DRProperties.saveShow)
 			break
 		}
 		case ActionNames.showCue:
 		case FeedbackTypes.showCanCue: {
-			addOptionToRequest(options, msg, DRProperties.uri)
-			addOptionToRequest(options, msg, DRProperties.templateData)
-			addOptionToRequest(options, msg, DRProperties.templateDisplayName)
-			addOptionToRequest(options, msg, DRProperties.pageDisplayName)
-			addOptionToRequest(options, msg, DRProperties.channelIndex)
-			addOptionToRequest(options, msg, DRProperties.ignoreChannelRules)
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.uri)
+			await addOptionToRequest(options, msg, DRProperties.templateData)
+			await addOptionToRequest(options, msg, DRProperties.templateDisplayName)
+			await addOptionToRequest(options, msg, DRProperties.pageDisplayName)
+			await addOptionToRequest(options, msg, DRProperties.channelIndex)
+			await addOptionToRequest(options, msg, DRProperties.ignoreChannelRules)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.showTake:
@@ -276,75 +306,75 @@ export function buildRequestMsg(
 		case FeedbackTypes.showCanTakeOutRecue:
 		case ActionNames.showClear:
 		case FeedbackTypes.showCanClear: {
-			addOptionToRequest(options, msg, DRProperties.channelIndex)
-			addOptionToRequest(options, msg, DRProperties.ignoreChannelRules)
+			await addOptionToRequest(options, msg, DRProperties.channelIndex)
+			await addOptionToRequest(options, msg, DRProperties.ignoreChannelRules)
 			break
 		}
 		case ActionNames.showCreatePage: {
-			addOptionToRequest(options, msg, DRProperties.name)
-			addOptionToRequest(options, msg, DRProperties.description)
-			addOptionToRequest(options, msg, DRProperties.keywords)
-			addOptionToRequest(options, msg, DRProperties.category)
-			addOptionToRequest(options, msg, DRProperties.channelIds)
-			addOptionToRequest(options, msg, DRProperties.level)
-			addOptionToRequest(options, msg, DRProperties.templateData)
+			await addOptionToRequest(options, msg, DRProperties.name)
+			await addOptionToRequest(options, msg, DRProperties.description)
+			await addOptionToRequest(options, msg, DRProperties.keywords)
+			await addOptionToRequest(options, msg, DRProperties.category)
+			await addOptionToRequest(options, msg, DRProperties.channelIds)
+			await addOptionToRequest(options, msg, DRProperties.level)
+			await addOptionToRequest(options, msg, DRProperties.templateData)
 			break
 		}
 		case ActionNames.showSetProjectDataEvent: {
-			addOptionToRequest(options, msg, DRProperties.dataPath)
+			await addOptionToRequest(options, msg, DRProperties.dataPath)
 			break
 		}
 		case ActionNames.showSetProjectDataBoolean: {
-			addOptionToRequest(options, msg, DRProperties.dataPath)
+			await addOptionToRequest(options, msg, DRProperties.dataPath)
 			if (options[DRProperties.toggle]) msg[DRProperties.specialAction] = DRProperties.toggle //This is special because the option name is not the same as the message property name
-			addOptionToRequest(options, msg, DRProperties.valueToSet)
+			await addOptionToRequest(options, msg, DRProperties.valueToSet)
 			break
 		}
 		case ActionNames.showSetProjectDataNumber: {
-			addOptionToRequest(options, msg, DRProperties.dataPath)
-			addOptionToRequest(options, msg, DRProperties.valueToSet)
-			addOptionToRequest(options, msg, DRProperties.setRelative)
+			await addOptionToRequest(options, msg, DRProperties.dataPath)
+			await addOptionToRequest(options, msg, DRProperties.valueToSet)
+			await addOptionToRequest(options, msg, DRProperties.setRelative)
 			break
 		}
 		case ActionNames.showSetProjectData: {
-			addOptionToRequest(options, msg, DRProperties.dataPath)
-			addOptionToRequest(options, msg, DRProperties.valueToSet)
+			await addOptionToRequest(options, msg, DRProperties.dataPath)
+			await addOptionToRequest(options, msg, DRProperties.valueToSet)
 			break
 		}
 		case ActionNames.showReloadTemplates: {
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.playlistActivate:
 		case FeedbackTypes.playlistCanActivate: {
-			addOptionToRequest(options, msg, DRProperties.index)
-			addOptionToRequest(options, msg, DRProperties.id)
-			addOptionToRequest(options, msg, DRProperties.name)
-			addOptionToRequest(options, msg, DRProperties.displayName)
-			addOptionToRequest(options, msg, DRProperties.channelIndex)
-			addOptionToRequest(options, msg, DRProperties.timeOut)
+			await addOptionToRequest(options, msg, DRProperties.index)
+			await addOptionToRequest(options, msg, DRProperties.id)
+			await addOptionToRequest(options, msg, DRProperties.name)
+			await addOptionToRequest(options, msg, DRProperties.displayName)
+			await addOptionToRequest(options, msg, DRProperties.channelIndex)
+			await addOptionToRequest(options, msg, DRProperties.timeOut)
 			break
 		}
 		case ActionNames.playlistRestart:
 		case FeedbackTypes.playlistCanRestart:
 		case FeedbackTypes.showCanCueChannel: {
-			addOptionToRequest(options, msg, DRProperties.channelIndex)
+			await addOptionToRequest(options, msg, DRProperties.channelIndex)
 			break
 		}
 		case ActionNames.macroExecute:
 		case FeedbackTypes.macroCanExecute: {
-			addOptionToRequest(options, msg, DRProperties.id)
-			addOptionToRequest(options, msg, DRProperties.name)
+			await addOptionToRequest(options, msg, DRProperties.id)
+			await addOptionToRequest(options, msg, DRProperties.name)
 			break
 		}
 		case ActionNames.logWrite: {
-			addOptionToRequest(options, msg, DRProperties.level, true)
-			addOptionToRequest(options, msg, DRProperties.message)
-			addOptionToRequest(options, msg, DRProperties.instanceId)
-			addOptionToRequest(options, msg, DRProperties.sourceModule)
-			addOptionToRequest(options, msg, DRProperties.messageId)
-			addOptionToRequest(options, msg, DRProperties.popup)
-			addOptionToRequest(options, msg, DRProperties.exceptionMessage)
+			await addOptionToRequest(options, msg, DRProperties.level, true)
+			await addOptionToRequest(options, msg, DRProperties.message)
+			await addOptionToRequest(options, msg, DRProperties.instanceId)
+			await addOptionToRequest(options, msg, DRProperties.sourceModule)
+			await addOptionToRequest(options, msg, DRProperties.messageId)
+			await addOptionToRequest(options, msg, DRProperties.popup)
+			await addOptionToRequest(options, msg, DRProperties.exceptionMessage)
 			break
 		}
 		default: {
@@ -354,26 +384,25 @@ export function buildRequestMsg(
 
 	return msg
 
-	function getTextWithVariableValue(inputValue: InputValue): string {
-		let value: string = undefined
-		drModuleInstance.parseVariables(inputValue.toString(), (v) => (value = v))
+	async function getTextWithVariableValue(inputValue: InputValue): Promise<string> {
+		const value = await drModuleInstance.parseVariablesInString(inputValue.toString())
 		return value
 	}
 
 	//Adds options to the Director Remoting request, important Director Remoting will convert each of the values to the according type (boolean, int, float, etc )
-	function addOptionToRequest(
+	async function addOptionToRequest(
 		options: { [key: string]: InputValue | undefined },
 		msg: any,
 		optionId: string,
 		isDropdown: boolean = false
-	): void {
+	): Promise<void> {
 		const optionValue = options[optionId]
 		if (optionValue !== null) {
 			//Only including options that are not null (undefined is included when checking for null)
 			if (typeof optionValue === 'string') {
 				if (optionValue != '') {
 					//Only adding the option if the value is not an empty string
-					msg[optionId] = isDropdown ? optionValue : getTextWithVariableValue(optionValue) //is Dropdown means it is dropdown type in gui (it always has a value and no variable can be written there, therefore no variable parsing is needed).
+					msg[optionId] = isDropdown ? optionValue : await getTextWithVariableValue(optionValue) //is Dropdown means it is dropdown type in gui (it always has a value and no variable can be written there, therefore no variable parsing is needed).
 				}
 			} else {
 				//booleans and othertypoes are set if they are not null
@@ -383,20 +412,38 @@ export function buildRequestMsg(
 	}
 }
 
-export function getFeedbackFromRequestId(
-	requestId: number,
-	drFeedbackInfos: DrFeedbackInfo[],
-	companionFeedbacks: CompanionFeedbackEvent[]
-) {
-	const drFeedbackInfoFound = drFeedbackInfos.find((fd) => fd.requestId === requestId)
-	if (drFeedbackInfoFound) {
-		//Feedback with that id exists
-		const feedbackFound = companionFeedbacks.find((fd) => fd.id === drFeedbackInfoFound.id)
-		return feedbackFound
+export function getFeedbackIdFromControlId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, controlId: string): string {
+	for (const [key, value] of drFeedbackInfoMap) {
+		if (value?.controlId === controlId) {
+			return key
+		}
+	}
+	return undefined
+}
+
+export function getFeedbackIdFromRequestId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, requestID: any): string {
+	for (const [key, value] of drFeedbackInfoMap) {
+		if (value?.requestId === requestID) {
+			return key
+		}
+	}
+	return undefined
+}
+
+export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionInfo>, controlId: string): string {
+	for (const [key, value] of drActionInfoMap) {
+		if (value?.controlId === controlId) {
+			return key
+		}
 	}
 	return undefined
 }
 
 export function isNumber(value: string | number): boolean {
 	return value != null && value !== '' && !isNaN(Number(value.toString()))
+}
+
+export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
+	clearInterval(timer)
+	timer = null
 }

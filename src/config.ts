@@ -1,5 +1,4 @@
-import InstanceSkel = require('../../../instance_skel')
-import { SomeCompanionConfigField } from '../../../instance_skel_types'
+import { SomeCompanionConfigField, Regex } from '@companion-module/base'
 import { CompanionLabels, Types } from './labels'
 
 export interface DRModuleConfig {
@@ -9,10 +8,10 @@ export interface DRModuleConfig {
 	intervalStatus?: number
 }
 
-export function getConfigFields(self: InstanceSkel<DRModuleConfig>): SomeCompanionConfigField[] {
+export function getConfigFields(): SomeCompanionConfigField[] {
 	return [
 		{
-			type: Types.text,
+			type: Types.staticText,
 			id: 'info',
 			width: 12,
 			label: CompanionLabels.infoLabel,
@@ -25,7 +24,7 @@ export function getConfigFields(self: InstanceSkel<DRModuleConfig>): SomeCompani
 			default: '127.0.0.1',
 			required: true,
 			width: 6,
-			regex: self.REGEX_IP,
+			regex: Regex.IP,
 		},
 		{
 			type: Types.number,

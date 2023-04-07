@@ -260,6 +260,9 @@ export const CompanionLabels = {
 	windowSetLayoutPresetBank: 'window set layout',
 	directorRemotingCommands: 'Director Remoting Commands',
 	or: 'Or',
+	saveStateInCustomVarible: 'Save state in custom variable',
+	saveStateInCustomVaribleTooltip:
+		'Save state in custom variable, the Director module will set a number suffix to ensure uniqueness',
 } as const
 
 //Types of Companion options, presets or feedbacks
@@ -268,7 +271,11 @@ export const Types = {
 	checkbox: 'checkbox',
 	number: 'number',
 	dropdown: 'dropdown',
-	text: 'text',
+	staticText: 'static-text',
 	textwithvariables: 'textwithvariables',
 	advanced: 'advanced',
+} as const
+
+export const Others = {
+	feedbackCustomVarIdOption: 'feedbackCustomVarIdOption', // Id of option to save feedback state in a custom variable
 } as const
