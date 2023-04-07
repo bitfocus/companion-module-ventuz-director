@@ -50,8 +50,8 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
-					await await this.handleActionCallback(action)
+				callback: async (action) => {
+					await this.handleActionCallback(action)
 				},
 			},
 			[ActionNames.windowReverse]: {
@@ -63,7 +63,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -76,7 +76,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -108,7 +108,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -150,7 +150,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -174,7 +174,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -197,7 +197,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -210,7 +210,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -223,7 +223,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -236,7 +236,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -249,7 +249,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -262,7 +262,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -275,7 +275,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -288,7 +288,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -337,7 +337,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -350,7 +350,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -367,7 +367,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -392,7 +392,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -408,7 +408,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -421,7 +421,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -434,7 +434,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -447,7 +447,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -470,7 +470,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -483,7 +483,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -496,7 +496,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -509,7 +509,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -522,7 +522,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -535,7 +535,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -548,7 +548,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -561,7 +561,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -574,7 +574,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -587,7 +587,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
@@ -637,7 +637,7 @@ export class ActionsProvider {
 				unsubscribe: (action: CompanionActionEvent) => {
 					this.unsubscribeAction(action)
 				},
-				callback: async (action, bank) => {
+				callback: async (action) => {
 					await this.handleActionCallback(action)
 				},
 			},
