@@ -99,7 +99,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	}
 
 	private processMessageForAction(json: any) {
-		let drActionInfo: DrActionInfo = undefined
+		let drActionInfo: DrActionInfo = null
 		for (const [_, value] of this.drActionInfoMap) {
 			if (value?.requestId === json.RequestID && value?.isRunning) {
 				drActionInfo = value

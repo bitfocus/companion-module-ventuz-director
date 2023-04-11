@@ -6,11 +6,11 @@ import { DRModuleInstance } from '.'
 export function createOption(
 	type: string,
 	id: string,
-	label = undefined,
-	defaultValue = undefined,
-	tooltip = undefined,
+	label = null,
+	defaultValue = null,
+	tooltip = null,
 	required = true,
-	min = undefined
+	min = null
 ): any {
 	if (!label) label = id
 	if (!tooltip) tooltip = label
@@ -42,8 +42,8 @@ export function getShowTakeOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -56,8 +56,8 @@ export function getShowRecueOnAirOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -70,8 +70,8 @@ export function getShowClearOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -84,8 +84,8 @@ export function getShowTakeOutOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -105,8 +105,8 @@ export function getShowCueOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -115,15 +115,15 @@ export function getShowCueOptions(): any[] {
 			DRProperties.ignoreChannelRules,
 			CompanionLabels.ignoreChannelRules,
 			false,
-			undefined,
+			null,
 			false
 		),
 		createOption(
 			Types.textwithvariables,
 			DRProperties.timeOut,
 			CompanionLabels.timeOut,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -137,7 +137,7 @@ export function getPlaylistRestartOptions(): any[] {
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
 			0,
-			undefined,
+			null,
 			false,
 			0
 		),
@@ -158,7 +158,7 @@ export function getPlaylistActivateOptions(): any[] {
 			DRProperties.channelIndex,
 			CompanionLabels.channelIndex,
 			0,
-			undefined,
+			null,
 			true,
 			0
 		),
@@ -166,8 +166,8 @@ export function getPlaylistActivateOptions(): any[] {
 			Types.textwithvariables,
 			DRProperties.timeOut,
 			CompanionLabels.timeOut,
-			undefined,
-			undefined,
+			null,
+			null,
 			false,
 			0
 		),
@@ -199,7 +199,7 @@ export function getFeedbackCustomVariableOption(): any {
 		Types.textInput,
 		Others.feedbackCustomVarIdOption,
 		CompanionLabels.saveStateInCustomVarible,
-		undefined,
+		null,
 		CompanionLabels.saveStateInCustomVaribleTooltip
 	)
 }
@@ -241,7 +241,7 @@ export function stopStatusTimer(drFeedbackInfoFound: DrFeedbackInfo) {
 
 export async function buildRequestMsg(
 	actionNameOrFeedbackType: string,
-	options: { [key: string]: InputValue | undefined },
+	options: { [key: string]: InputValue | null },
 	command: string,
 	requestId: number,
 	drModuleInstance: DRModuleInstance
@@ -391,7 +391,7 @@ export async function buildRequestMsg(
 
 	//Adds options to the Director Remoting request, important Director Remoting will convert each of the values to the according type (boolean, int, float, etc )
 	async function addOptionToRequest(
-		options: { [key: string]: InputValue | undefined },
+		options: { [key: string]: InputValue | null },
 		msg: any,
 		optionId: string,
 		isDropdown: boolean = false
@@ -418,7 +418,7 @@ export function getFeedbackIdFromControlId(drFeedbackInfoMap: Map<string, DrFeed
 			return key
 		}
 	}
-	return undefined
+	return null
 }
 
 export function getFeedbackIdFromRequestId(drFeedbackInfoMap: Map<string, DrFeedbackInfo>, requestID: any): string {
@@ -427,7 +427,7 @@ export function getFeedbackIdFromRequestId(drFeedbackInfoMap: Map<string, DrFeed
 			return key
 		}
 	}
-	return undefined
+	return null
 }
 
 export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionInfo>, controlId: string): string {
@@ -436,7 +436,7 @@ export function getActionIdFromControlId(drActionInfoMap: Map<string, DrActionIn
 			return key
 		}
 	}
-	return undefined
+	return null
 }
 
 export function isNumber(value: string | number): boolean {

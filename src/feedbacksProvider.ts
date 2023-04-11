@@ -88,8 +88,8 @@ export class FeedbacksProvider {
 							Types.textwithvariables,
 							DRProperties.channelIndex,
 							CompanionLabels.channelIndex,
-							undefined,
-							undefined,
+							null,
+							null,
 							false,
 							0
 						) as SomeCompanionFeedbackInputField,
@@ -257,8 +257,8 @@ export class FeedbacksProvider {
 
 	private subscribeFeedback(feedback: CompanionFeedbackInfo, statusCommand: string, requestId: number) {
 		const varNameRaw = feedback.options[Others.feedbackCustomVarIdOption]
-		const varName = varNameRaw ? varNameRaw.toString() : undefined
-		let variableId: string = undefined
+		const varName = varNameRaw ? varNameRaw.toString() : null
+		let variableId: string = null
 		if (varName) {
 			//The user wants a customvariable
 			variableId = `${varName}_${requestId.toString()}`
@@ -268,11 +268,11 @@ export class FeedbacksProvider {
 			controlId: feedback.controlId,
 			feedbackId: feedback.feedbackId,
 			options: feedback.options,
-			statusTimer: undefined,
+			statusTimer: null,
 			requestId: requestId,
 			can: false,
 			statusCommand: statusCommand,
-			drVariableInfo: variableId ? { variableId: variableId, name: varName, value: undefined } : undefined,
+			drVariableInfo: variableId ? { variableId: variableId, name: varName, value: null } : null,
 			responseCode: -1,
 		}
 

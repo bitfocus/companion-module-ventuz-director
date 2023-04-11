@@ -89,15 +89,15 @@ export class ActionsProvider {
 						DRProperties.saveTopology,
 						CompanionLabels.saveTopology,
 						false,
-						undefined,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.timeOut,
 						CompanionLabels.timeOut,
-						undefined,
-						undefined,
+						null,
+						null,
 						false,
 						0
 					),
@@ -121,25 +121,25 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.publishContextName,
 						CompanionLabels.publishContextName,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.publishContextId,
 						CompanionLabels.publishContextId,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
-					createOption(Types.textwithvariables, DRProperties.uri, DRProperties.uri, undefined, undefined, false),
+					createOption(Types.textwithvariables, DRProperties.uri, DRProperties.uri, null, null, false),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.timeOut,
 						CompanionLabels.timeOut,
-						undefined,
-						undefined,
+						null,
+						null,
 						false,
 						0
 					),
@@ -162,8 +162,8 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.timeOut,
 						CompanionLabels.timeOut,
-						undefined,
-						undefined,
+						null,
+						null,
 						false,
 						0
 					),
@@ -181,13 +181,13 @@ export class ActionsProvider {
 			[ActionNames.showClose]: {
 				name: CompanionLabels.showClose,
 				options: [
-					createOption(Types.checkbox, DRProperties.saveShow, CompanionLabels.saveShow, false, undefined, false),
+					createOption(Types.checkbox, DRProperties.saveShow, CompanionLabels.saveShow, false, null, false),
 					createOption(
 						Types.checkbox,
 						DRProperties.clearRenderer,
 						CompanionLabels.clearRenderer,
 						false,
-						undefined,
+						null,
 						false
 					),
 				],
@@ -300,32 +300,32 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.description,
 						DRProperties.description,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.keywords,
 						DRProperties.keywords,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.category,
 						DRProperties.category,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.channelIds,
 						CompanionLabels.channelIds,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(Types.textwithvariables, DRProperties.level),
@@ -358,8 +358,8 @@ export class ActionsProvider {
 				name: CompanionLabels.showSetProjectDataBoolean,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
-					createOption(Types.checkbox, DRProperties.toggle, DRProperties.toggle, false, undefined, false),
-					createOption(Types.checkbox, DRProperties.valueToSet, CompanionLabels.value, false, undefined, false),
+					createOption(Types.checkbox, DRProperties.toggle, DRProperties.toggle, false, null, false),
+					createOption(Types.checkbox, DRProperties.valueToSet, CompanionLabels.value, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -379,12 +379,12 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.valueToSet,
 						CompanionLabels.value,
-						undefined,
-						undefined,
+						null,
+						null,
 						true,
 						0
 					),
-					createOption(Types.checkbox, DRProperties.setRelative, CompanionLabels.relative, false, undefined, false),
+					createOption(Types.checkbox, DRProperties.setRelative, CompanionLabels.relative, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -458,8 +458,8 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.timeOut,
 						CompanionLabels.timeOut,
-						undefined,
-						undefined,
+						null,
+						null,
 						false,
 						0
 					),
@@ -600,34 +600,34 @@ export class ActionsProvider {
 						Types.textwithvariables,
 						DRProperties.sourceModule,
 						CompanionLabels.sourceModule,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.instanceId,
 						CompanionLabels.instanceId,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.messageId,
 						CompanionLabels.messageId,
-						undefined,
-						undefined,
+						null,
+						null,
 						false,
 						0
 					),
-					createOption(Types.checkbox, DRProperties.popup, undefined, false, undefined, false),
+					createOption(Types.checkbox, DRProperties.popup, null, false, null, false),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.exceptionMessage,
 						CompanionLabels.exceptionMessage,
-						undefined,
-						undefined,
+						null,
+						null,
 						false
 					),
 				],
