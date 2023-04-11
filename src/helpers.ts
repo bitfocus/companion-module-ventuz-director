@@ -13,7 +13,6 @@ export function createOption(
 	min = null
 ): any {
 	if (!label) label = id
-	if (!tooltip) tooltip = label
 	if (type === Types.textwithvariables) {
 		return {
 			type: Types.textInput,
