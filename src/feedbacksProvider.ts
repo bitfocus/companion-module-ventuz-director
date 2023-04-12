@@ -263,9 +263,9 @@ export class FeedbacksProvider {
 		if (varName) {
 			//The user wants a custom variable
 			variableId = varName
-			// Uncommented for now: We cannot control when a feedback is subscribed / unsusbcribed, the numbers can we strange generated because a feedback can be re-subscribed before being unsubscribed first. 
+			// Uncommented for now: We cannot control when a feedback is subscribed / unsusbcribed, the numbers can we strange generated because a feedback can be re-subscribed before being unsubscribed first.
 			// const existingVarIds = [...this.drModuleInstance.drFeedbackInfoMap.values()].filter(v => v.drVariableInfo?.variableId).map(v => v.drVariableInfo.variableId);
-			// variableId = generateName(varName, existingVarIds); 
+			// variableId = generateName(varName, existingVarIds);
 		}
 
 		const newDrFeedbackInfo: DrFeedbackInfo = {

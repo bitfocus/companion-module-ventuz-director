@@ -23,7 +23,7 @@ export class DRModuleInstance extends InstanceBase<DRModuleConfig> {
 	timers: NodeJS.Timer[]
 	drActionInfoMap: Map<string, DrActionInfo>
 	drFeedbackInfoMap: Map<string, DrFeedbackInfo>
-	
+
 	//Constructor
 	constructor(internal: unknown) {
 		super(internal)

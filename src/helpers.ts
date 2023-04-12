@@ -117,29 +117,13 @@ export function getShowCueOptions(): any[] {
 			null,
 			false
 		),
-		createOption(
-			Types.textwithvariables,
-			DRProperties.timeOut,
-			CompanionLabels.timeOut,
-			null,
-			null,
-			false,
-			0
-		),
+		createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 	]
 }
 
 export function getPlaylistRestartOptions(): any[] {
 	return [
-		createOption(
-			Types.textwithvariables,
-			DRProperties.channelIndex,
-			CompanionLabels.channelIndex,
-			0,
-			null,
-			false,
-			0
-		),
+		createOption(Types.textwithvariables, DRProperties.channelIndex, CompanionLabels.channelIndex, 0, null, false, 0),
 	]
 }
 
@@ -152,24 +136,8 @@ export function getPlaylistActivateOptions(): any[] {
 		createOption(Types.textwithvariables, DRProperties.name),
 		createOrOption(),
 		createOption(Types.textwithvariables, DRProperties.displayName, CompanionLabels.displayName),
-		createOption(
-			Types.textwithvariables,
-			DRProperties.channelIndex,
-			CompanionLabels.channelIndex,
-			0,
-			null,
-			true,
-			0
-		),
-		createOption(
-			Types.textwithvariables,
-			DRProperties.timeOut,
-			CompanionLabels.timeOut,
-			null,
-			null,
-			false,
-			0
-		),
+		createOption(Types.textwithvariables, DRProperties.channelIndex, CompanionLabels.channelIndex, 0, null, true, 0),
+		createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 	]
 }
 
@@ -448,6 +416,6 @@ export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
 }
 
 export function generateName(name: string, existingNames: string[], index: number = 0): string {
-	const uniqueName = index === 0 ? name : `${name}_${index}`;
+	const uniqueName = index === 0 ? name : `${name}_${index}`
 	return existingNames.includes(uniqueName) ? generateName(name, existingNames, index + 1) : uniqueName
 }

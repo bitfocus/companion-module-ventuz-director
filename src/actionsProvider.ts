@@ -84,23 +84,8 @@ export class ActionsProvider {
 				name: CompanionLabels.topologySet,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.name),
-					createOption(
-						Types.checkbox,
-						DRProperties.saveTopology,
-						CompanionLabels.saveTopology,
-						false,
-						null,
-						false
-					),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.timeOut,
-						CompanionLabels.timeOut,
-						null,
-						null,
-						false,
-						0
-					),
+					createOption(Types.checkbox, DRProperties.saveTopology, CompanionLabels.saveTopology, false, null, false),
+					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.topologySet)
@@ -134,15 +119,7 @@ export class ActionsProvider {
 						false
 					),
 					createOption(Types.textwithvariables, DRProperties.uri, DRProperties.uri, null, null, false),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.timeOut,
-						CompanionLabels.timeOut,
-						null,
-						null,
-						false,
-						0
-					),
+					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.remotePlaylistOpen)
@@ -158,15 +135,7 @@ export class ActionsProvider {
 				name: CompanionLabels.showOpen,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.uri),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.timeOut,
-						CompanionLabels.timeOut,
-						null,
-						null,
-						false,
-						0
-					),
+					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showOpen)
@@ -182,14 +151,7 @@ export class ActionsProvider {
 				name: CompanionLabels.showClose,
 				options: [
 					createOption(Types.checkbox, DRProperties.saveShow, CompanionLabels.saveShow, false, null, false),
-					createOption(
-						Types.checkbox,
-						DRProperties.clearRenderer,
-						CompanionLabels.clearRenderer,
-						false,
-						null,
-						false
-					),
+					createOption(Types.checkbox, DRProperties.clearRenderer, CompanionLabels.clearRenderer, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showClose)
@@ -296,38 +258,10 @@ export class ActionsProvider {
 				name: CompanionLabels.showCreatePage,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.name),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.description,
-						DRProperties.description,
-						null,
-						null,
-						false
-					),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.keywords,
-						DRProperties.keywords,
-						null,
-						null,
-						false
-					),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.category,
-						DRProperties.category,
-						null,
-						null,
-						false
-					),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.channelIds,
-						CompanionLabels.channelIds,
-						null,
-						null,
-						false
-					),
+					createOption(Types.textwithvariables, DRProperties.description, DRProperties.description, null, null, false),
+					createOption(Types.textwithvariables, DRProperties.keywords, DRProperties.keywords, null, null, false),
+					createOption(Types.textwithvariables, DRProperties.category, DRProperties.category, null, null, false),
+					createOption(Types.textwithvariables, DRProperties.channelIds, CompanionLabels.channelIds, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.level),
 					createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData),
 				],
@@ -375,15 +309,7 @@ export class ActionsProvider {
 				name: CompanionLabels.showSetProjectDataNumber,
 				options: [
 					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.valueToSet,
-						CompanionLabels.value,
-						null,
-						null,
-						true,
-						0
-					),
+					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value, null, null, true, 0),
 					createOption(Types.checkbox, DRProperties.setRelative, CompanionLabels.relative, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
@@ -454,15 +380,7 @@ export class ActionsProvider {
 			[ActionNames.showReloadTemplates]: {
 				name: CompanionLabels.showReloadTemplates,
 				options: [
-					createOption(
-						Types.textwithvariables,
-						DRProperties.timeOut,
-						CompanionLabels.timeOut,
-						null,
-						null,
-						false,
-						0
-					),
+					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showReloadTemplates)
@@ -604,14 +522,7 @@ export class ActionsProvider {
 						null,
 						false
 					),
-					createOption(
-						Types.textwithvariables,
-						DRProperties.instanceId,
-						CompanionLabels.instanceId,
-						null,
-						null,
-						false
-					),
+					createOption(Types.textwithvariables, DRProperties.instanceId, CompanionLabels.instanceId, null, null, false),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.messageId,
