@@ -7,6 +7,7 @@ import {
 } from '@companion-module/base'
 import {
 	createOption,
+	generateName,
 	getActionIdFromControlId,
 	getFeedbackCustomVariableOption,
 	getMacroExecuteOptions,
@@ -260,8 +261,11 @@ export class FeedbacksProvider {
 		const varName = varNameRaw ? varNameRaw.toString() : null
 		let variableId: string = null
 		if (varName) {
-			//The user wants a customvariable
-			variableId = `${varName}_${requestId.toString()}`
+			//The user wants a custom variable
+			variableId = varName
+			// Uncommented for now: We cannot control when a feedback is subscribed / unsusbcribed, the numbers can we strange generated because a feedback can be re-subscribed before being unsubscribed first. 
+			// const existingVarIds = [...this.drModuleInstance.drFeedbackInfoMap.values()].filter(v => v.drVariableInfo?.variableId).map(v => v.drVariableInfo.variableId);
+			// variableId = generateName(varName, existingVarIds); 
 		}
 
 		const newDrFeedbackInfo: DrFeedbackInfo = {

@@ -446,3 +446,8 @@ export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
 	clearInterval(timer)
 	timer = null
 }
+
+export function generateName(name: string, existingNames: string[], index: number = 0): string {
+	const uniqueName = index === 0 ? name : `${name}_${index}`;
+	return existingNames.includes(uniqueName) ? generateName(name, existingNames, index + 1) : uniqueName
+}
