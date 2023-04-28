@@ -1,6 +1,6 @@
 # companion-module-ventuz-director
 
-This module allows you to control the [Ventuz](https://www.ventuz.com/) [Director](https://www.ventuz.com/director/) (Enterprise edition) via Websocket.
+This module allows you to control the [Ventuz](https://www.ventuz.com/) [Director](https://www.ventuz.com/director/) (Enterprise edition) via Websocket, it consumes the [Director Remoting API](https://www.ventuz.com/support/help/latest/Director/DirectorRemoting.html) to communicate, it is recommended to consult the specification for its use.
 
 ## Getting started
 
