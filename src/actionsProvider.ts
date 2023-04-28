@@ -262,8 +262,14 @@ export class ActionsProvider {
 					createOption(Types.textwithvariables, DRProperties.keywords, DRProperties.keywords, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.category, DRProperties.category, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.channelIds, CompanionLabels.channelIds, null, null, false),
-					createOption(Types.textwithvariables, DRProperties.level, null, null,  CompanionLabels.required),
-					createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData, null,  CompanionLabels.required),
+					createOption(Types.textwithvariables, DRProperties.level, null, null, CompanionLabels.required),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.templateData,
+						CompanionLabels.templateData,
+						null,
+						CompanionLabels.required
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showCreatePage)
@@ -277,7 +283,15 @@ export class ActionsProvider {
 			},
 			[ActionNames.showSetProjectDataEvent]: {
 				name: CompanionLabels.showSetProjectDataEvent,
-				options: [createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path, null, CompanionLabels.required)],
+				options: [
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
 				},
@@ -291,9 +305,22 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectDataBoolean]: {
 				name: CompanionLabels.showSetProjectDataBoolean,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path, null, CompanionLabels.required),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
 					createOption(Types.checkbox, DRProperties.toggle, DRProperties.toggle, false, null, false),
-					createOption(Types.checkbox, DRProperties.valueToSet, CompanionLabels.value, false, CompanionLabels.onlyNeededIfToggle, false),
+					createOption(
+						Types.checkbox,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						false,
+						CompanionLabels.onlyNeededIfToggle,
+						false
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -308,8 +335,22 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectDataNumber]: {
 				name: CompanionLabels.showSetProjectDataNumber,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path, null, CompanionLabels.required),
-					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value, null, CompanionLabels.required, true, 0),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						null,
+						CompanionLabels.required,
+						true,
+						0
+					),
 					createOption(Types.checkbox, DRProperties.setRelative, CompanionLabels.relative, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
@@ -325,8 +366,20 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectData]: {
 				name: CompanionLabels.showSetProjectData,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path, null, CompanionLabels.required),
-					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value, null, CompanionLabels.required),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						null,
+						CompanionLabels.required
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
