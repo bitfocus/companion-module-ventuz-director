@@ -33,7 +33,7 @@ export function getConfigFields(): SomeCompanionConfigField[] {
 			min: 1,
 			max: 65535,
 			required: true,
-			default: 20404,
+			default: 21404,
 			width: 6,
 		},
 		{
