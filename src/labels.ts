@@ -263,6 +263,11 @@ export const CompanionLabels = {
 	saveStateInCustomVarible: 'Save state in custom variable',
 	saveStateInCustomVaribleTooltip:
 		'Save state in custom variable, the Director module will set a number suffix to ensure uniqueness',
+	required: "Required",
+	onlyNeededIfToggle: "Only needed if \"Toggle\" is not checked, \"Toggle\" has priority over \"Path\"",
+	playlistRestartAdvice: "Note that the restart for playlist will only execute when in Director: user interaction is enabled, playlist has at least one item and timeline is deactivated.",
+	requiredWhen: "Required when",
+	isNotProvided: "is not provided",
 } as const
 
 //Types of Companion options, presets or feedbacks

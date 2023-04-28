@@ -172,7 +172,7 @@ export class FeedbacksProvider {
 			[FeedbackTypes.playlistCanRestart]: {
 				type: Types.advanced,
 				name: CompanionLabels.playlistCanRestart,
-				description: CompanionLabels.playlistCanRestartDescription,
+				description: CompanionLabels.playlistCanRestartDescription + ". " + CompanionLabels.playlistRestartAdvice,
 				options: [
 					...(getPlaylistRestartOptions() as SomeCompanionFeedbackInputField[]),
 					getFeedbackCustomVariableOption(),
