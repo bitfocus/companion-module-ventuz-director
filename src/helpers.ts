@@ -93,13 +93,45 @@ export function getShowTakeOutOptions(): any[] {
 
 export function getShowCueOptions(): any[] {
 	return [
-		createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.templateData,
+			CompanionLabels.templateData,
+			null,
+			createRequiredWhenNotLabel([
+				DRProperties.uri,
+				CompanionLabels.templateDisplayName,
+				CompanionLabels.pageDisplayName,
+			])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.uri),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.uri,
+			null,
+			null,
+			createRequiredWhenNotLabel([
+				CompanionLabels.templateData,
+				CompanionLabels.templateDisplayName,
+				CompanionLabels.pageDisplayName,
+			])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.templateDisplayName, CompanionLabels.templateDisplayName),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.templateDisplayName,
+			CompanionLabels.templateDisplayName,
+			null,
+			createRequiredWhenNotLabel([CompanionLabels.templateData, DRProperties.uri, CompanionLabels.pageDisplayName])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.pageDisplayName, CompanionLabels.pageDisplayName),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.pageDisplayName,
+			CompanionLabels.pageDisplayName,
+			null,
+			createRequiredWhenNotLabel([CompanionLabels.templateData, DRProperties.uri, CompanionLabels.templateDisplayName])
+		),
 		createOption(
 			Types.textwithvariables,
 			DRProperties.channelIndex,
@@ -129,31 +161,75 @@ export function getPlaylistRestartOptions(): any[] {
 
 export function getPlaylistActivateOptions(): any[] {
 	return [
-		createOption(Types.textwithvariables, DRProperties.index),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.index,
+			null,
+			null,
+			createRequiredWhenNotLabel([DRProperties.id, DRProperties.name, DRProperties.displayName])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.id),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.id,
+			null,
+			null,
+			createRequiredWhenNotLabel([DRProperties.index, DRProperties.name, DRProperties.displayName])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.name),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.name,
+			null,
+			null,
+			createRequiredWhenNotLabel([DRProperties.id, DRProperties.index, DRProperties.displayName])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.displayName, CompanionLabels.displayName),
-		createOption(Types.textwithvariables, DRProperties.channelIndex, CompanionLabels.channelIndex, 0, null, true, 0),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.displayName,
+			CompanionLabels.displayName,
+			null,
+			createRequiredWhenNotLabel([DRProperties.id, DRProperties.name, DRProperties.index])
+		),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.channelIndex,
+			CompanionLabels.channelIndex,
+			0,
+			CompanionLabels.required,
+			true,
+			0
+		),
 		createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 	]
 }
 
 export function getMacroExecuteOptions(): any[] {
 	return [
-		createOption(Types.textwithvariables, DRProperties.id),
+		createOption(Types.textwithvariables, DRProperties.id, null, null, createRequiredWhenNotLabel([DRProperties.name])),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.name),
+		createOption(Types.textwithvariables, DRProperties.name, null, null, createRequiredWhenNotLabel([DRProperties.id])),
 	]
 }
 
 export function getWindowSetLayoutOptions(): any[] {
 	return [
-		createOption(Types.textwithvariables, DRProperties.index),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.index,
+			null,
+			null,
+			createRequiredWhenNotLabel([DRProperties.name])
+		),
 		createOrOption(),
-		createOption(Types.textwithvariables, DRProperties.name),
+		createOption(
+			Types.textwithvariables,
+			DRProperties.name,
+			null,
+			null,
+			createRequiredWhenNotLabel([DRProperties.index])
+		),
 	]
 }
 
@@ -413,4 +489,22 @@ export function isNumber(value: string | number): boolean {
 export function clearIntervalAndUnassign(timer: NodeJS.Timer) {
 	clearInterval(timer)
 	timer = null
+}
+
+/** Creates a string that warms the user then the according value is required */
+function createRequiredWhenNotLabel(paramsRaw: string[]) {
+	if (!paramsRaw?.length) return null
+
+	const params = paramsRaw.map((v) => `"${v}"`)
+	const lastIndex = params.length - 1
+	const lastParam = params[lastIndex]
+	let final: string = null
+	if (params.length > 1) {
+		params.splice(lastIndex, 1)
+		const first = params.join(' , ')
+		final = [first, lastParam].join(` ${CompanionLabels.or.toLowerCase()} `)
+	} else {
+		final = lastParam
+	}
+	return `${CompanionLabels.requiredWhen} ${final} ${CompanionLabels.isNotProvided}`
 }

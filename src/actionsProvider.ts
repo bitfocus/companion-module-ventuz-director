@@ -83,7 +83,7 @@ export class ActionsProvider {
 			[ActionNames.topologySet]: {
 				name: CompanionLabels.topologySet,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.name),
+					createOption(Types.textwithvariables, DRProperties.name, null, null, CompanionLabels.required),
 					createOption(Types.checkbox, DRProperties.saveTopology, CompanionLabels.saveTopology, false, null, false),
 					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
@@ -100,7 +100,7 @@ export class ActionsProvider {
 			[ActionNames.remotePlaylistOpen]: {
 				name: CompanionLabels.remotePlaylistOpen,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.playlistId),
+					createOption(Types.textwithvariables, DRProperties.playlistId, null, null, CompanionLabels.required),
 					this.createSpecialActionOption(),
 					createOption(
 						Types.textwithvariables,
@@ -134,7 +134,7 @@ export class ActionsProvider {
 			[ActionNames.showOpen]: {
 				name: CompanionLabels.showOpen,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.uri),
+					createOption(Types.textwithvariables, DRProperties.uri, null, null, CompanionLabels.required),
 					createOption(Types.textwithvariables, DRProperties.timeOut, CompanionLabels.timeOut, null, null, false, 0),
 				],
 				subscribe: (action: CompanionActionEvent) => {
@@ -257,13 +257,19 @@ export class ActionsProvider {
 			[ActionNames.showCreatePage]: {
 				name: CompanionLabels.showCreatePage,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.name),
+					createOption(Types.textwithvariables, DRProperties.name, null, null, CompanionLabels.required),
 					createOption(Types.textwithvariables, DRProperties.description, DRProperties.description, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.keywords, DRProperties.keywords, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.category, DRProperties.category, null, null, false),
 					createOption(Types.textwithvariables, DRProperties.channelIds, CompanionLabels.channelIds, null, null, false),
-					createOption(Types.textwithvariables, DRProperties.level),
-					createOption(Types.textwithvariables, DRProperties.templateData, CompanionLabels.templateData),
+					createOption(Types.textwithvariables, DRProperties.level, null, null, CompanionLabels.required),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.templateData,
+						CompanionLabels.templateData,
+						null,
+						CompanionLabels.required
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showCreatePage)
@@ -277,7 +283,15 @@ export class ActionsProvider {
 			},
 			[ActionNames.showSetProjectDataEvent]: {
 				name: CompanionLabels.showSetProjectDataEvent,
-				options: [createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path)],
+				options: [
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
 				},
@@ -291,9 +305,22 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectDataBoolean]: {
 				name: CompanionLabels.showSetProjectDataBoolean,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
 					createOption(Types.checkbox, DRProperties.toggle, DRProperties.toggle, false, null, false),
-					createOption(Types.checkbox, DRProperties.valueToSet, CompanionLabels.value, false, null, false),
+					createOption(
+						Types.checkbox,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						false,
+						CompanionLabels.onlyNeededIfToggle,
+						false
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -308,8 +335,22 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectDataNumber]: {
 				name: CompanionLabels.showSetProjectDataNumber,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
-					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value, null, null, true, 0),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						null,
+						CompanionLabels.required,
+						true,
+						0
+					),
 					createOption(Types.checkbox, DRProperties.setRelative, CompanionLabels.relative, false, null, false),
 				],
 				subscribe: (action: CompanionActionEvent) => {
@@ -325,8 +366,20 @@ export class ActionsProvider {
 			[ActionNames.showSetProjectData]: {
 				name: CompanionLabels.showSetProjectData,
 				options: [
-					createOption(Types.textwithvariables, DRProperties.dataPath, CompanionLabels.path),
-					createOption(Types.textwithvariables, DRProperties.valueToSet, CompanionLabels.value),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.dataPath,
+						CompanionLabels.path,
+						null,
+						CompanionLabels.required
+					),
+					createOption(
+						Types.textwithvariables,
+						DRProperties.valueToSet,
+						CompanionLabels.value,
+						null,
+						CompanionLabels.required
+					),
 				],
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.showSetProjectData)
@@ -408,6 +461,7 @@ export class ActionsProvider {
 			[ActionNames.playlistRestart]: {
 				name: CompanionLabels.playlistRestart,
 				options: getPlaylistRestartOptions(),
+				description: CompanionLabels.playlistRestartAdvice,
 				subscribe: (action: CompanionActionEvent) => {
 					this.subscribeAction(action, DRCommands.playlistRestart)
 				},
@@ -513,7 +567,7 @@ export class ActionsProvider {
 				name: CompanionLabels.logWrite,
 				options: [
 					this.createLevelOption(),
-					createOption(Types.textwithvariables, DRProperties.message),
+					createOption(Types.textwithvariables, DRProperties.message, null, null, CompanionLabels.required),
 					createOption(
 						Types.textwithvariables,
 						DRProperties.sourceModule,
@@ -640,6 +694,7 @@ export class ActionsProvider {
 			label: CompanionLabels.specialAction,
 			id: DRProperties.specialAction,
 			default: DRProperties.useBlankShow,
+			tooltip: CompanionLabels.required,
 			choices: [
 				{ id: DRProperties.useBlankShow, label: CompanionLabels.useBlankShow },
 				{ id: DRProperties.useShowUri, label: CompanionLabels.useShowUri },
@@ -655,6 +710,7 @@ export class ActionsProvider {
 			label: DRProperties.level,
 			id: DRProperties.level,
 			default: DRProperties.info,
+			tooltip: CompanionLabels.required,
 			choices: [
 				{ id: DRProperties.verbose, label: DRProperties.verbose },
 				{ id: DRProperties.info, label: DRProperties.info },

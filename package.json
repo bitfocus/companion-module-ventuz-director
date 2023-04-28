@@ -1,6 +1,6 @@
 {
   "name": "ventuz-director",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && yarn build:main",
