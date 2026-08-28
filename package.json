@@ -20,6 +20,7 @@
   "devDependencies": {
     "@companion-module/tools": "^2.8.0",
     "@types/ws": "^8.5.4",
+    "rimraf": "^5.0.10",
     "typescript": "^5.0.3"
   }
 }
